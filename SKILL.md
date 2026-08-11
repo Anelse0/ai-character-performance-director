@@ -25,6 +25,7 @@ description: 将角色意图、关系、刺激、情绪、对白、时长与镜�
 1. `references/acting-core.md`
 2. 与模式对应的 `references/actor-cut.md` 或 `references/narrative-performance.md`
 3. `references/quality-gates.md`
+4. `references/evidence-ledger.md`
 
 按需再读取：
 
@@ -60,6 +61,7 @@ references:
 known_failures:
 ending:
 kling_workflow: auto | standard_single | custom_multi_shot | motion_control
+spatial_control: auto | prompt_only | motion_control
 motion_scope: localized | upper_body | full_body
 motion_precision: approximate | repeatable | exact
 motion_concurrency:
@@ -71,6 +73,8 @@ facial_element:
 gaze_target:
 gaze_behavior: establish | naturally_adjust | reacquire
 expression_references:
+spatial_lock: none | soft | hard
+root_motion: allowed | bounded | locked
 ```
 
 只在缺失信息会改变表演策略时追问，例如：不知道刺激是什么，且“听到坏消息”与“看见证据”会产生不同的镜头行为。其他缺失项做最小合理推断，并在结果中用一行说明。
@@ -111,6 +115,7 @@ relationship → current WANT → optional HIDE/CONFLICT → trigger → playabl
 - 可串行描述的一条简单动作链：`standard_single`；
 - 复杂性来自多个镜头任务，而不是单个连续身体动作：`custom_multi_shot`；
 - 要求精确路径/次数/节奏，或复杂表情与转头、手部、身体运动需要高协调：`motion_control`。
+- `root_motion: locked` 是本 skill 的内部需求标签，不是 Kling 官方字段。先按 `[K-I2V-01]`、`[K-PROMPT-01]`、`[K-PROMPT-02]` 修正纯文本的主体运动状态、动作方向和竞争动作；只有用户明确接受更换工作流时，才另给 Motion Control 方案。
 
 若用户没有动作参考且 Motion Control 才能可靠满足要求，明确指出素材需求；不要把 Omni 当成精确动作驱动替代品。
 
@@ -170,6 +175,13 @@ baseline
 差：no random gestures
 好：hands remain on the table; the right thumb tightens once and releases
 ```
+
+新增或修改模型能力、失败归因和稳定修复规则前，执行证据门禁：
+
+- 官方能力事实必须登记官方来源；
+- 用户实测只在相同模型、工作流与约束范围内成立，不扩写成普遍因果；
+- 尚未获得官方依据或用户生成结果的修复，只能作为“待验证实验版本”输出，不能写入稳定规则或宣称已修复；
+- 证据状态与编号统一记录在 `references/evidence-ledger.md`。
 
 ## 默认输出
 

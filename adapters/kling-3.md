@@ -24,6 +24,8 @@ reference_role:
 motion_source:
 facial_element_binding:
 orientation:
+root_motion: allowed | bounded | locked
+spatial_control: prompt_only | motion_control
 ```
 
 `reaction owner`、`visible sequence`、`end state`、`acting guardrail` 是创作规划概念，不是官方字段。可在分析中使用，但最终应渲染为普通正文。
@@ -82,6 +84,9 @@ End with [residue]. [bounded positive guardrails].
 - 遇到跑、跳、转身或复合手势时，按 Motion Unit 写准备、主动作和收势，并补充必要的速度、方向、接触/支撑与镜头关系。
 - Standard 中每个 beat 只保留一个主要表演意图；不同身体区域承担独立任务时先删减或串行，不能把多个任务都塞进“同时”。
 - 对镜表演若伴随转头或身体运动，写“静止时建立对视—运动时眼神自然调整—回正/落稳后重新对镜”，不要写“眼珠全程固定”或用“始终直视前方”制造锁眼冲突。
+- `root_motion: locked` 是内部需求标签，不伪装成官方配置。纯 Prompt 原地修复若尚无用户生成验证，必须标成“待验证实验版本”，不能宣称某组措辞可以锁定人物。
+- 纯 Prompt 版本遵守官方图生视频规则：用简单直接的“主体＋运动状态”描述，把静止状态与允许发生的局部动作都写清；减少不必要的场景复述与竞争动作。依据见 `[K-I2V-01]`、`[K-PROMPT-01]`、`[K-PROMPT-02]`。
+- Standard 已被用户实测出现走近/退回时，先修正文的空间语义：在开头定义站定、足底承重和人物—镜头距离不变；各 beat 只写允许的局部动作及其方向；删除与零位移目标竞争的前后向动作和“回到原位”式返回任务。该写法依据官方“主体＋运动状态”、可见方向/接触/镜头关系及减少竞争动作的指南，并已在 `[USER-K3-02]` 的同条件测试中验证可行；超出该条件范围时重新验收。
 - 台词前先动作，台词后嘴部停止发音。
 - 单镜内只保留一个主表演弧。
 - 若单镜属于演员 Cut 情绪表演，使用上一节的强制分段框架；其他 Standard 单镜仍可使用连续正文。
@@ -136,6 +141,7 @@ character_image:
 facial_element_binding: required | recommended | unnecessary
 orientation:
 audio:
+root_motion: locked | bounded | allowed
 ```
 
 这些是用户需要确认的概念配置，不伪装成固定 API 字段。使用 Facial Element Binding 时说明当前官方入口要求人物朝向匹配动作视频；若实际 UI 改变，以当前入口为准。
@@ -149,6 +155,8 @@ audio:
 ```
 
 需要指定时长时，让动作参考本身覆盖目标表演长度；不要宣称正文里的时间段可以覆盖动作参考的节奏。
+
+需要人物原地表演时，动作参考本身应呈现人物原地完成目标动作，并遵守官方建议：单镜连续、避免机位运动、动作稳定且速度适中、尽量减少位移。Motion Control 的人物动作会跟随动作参考，因此不能用补充 Prompt 反向承诺消除参考中已有的走近/后退。依据见 `[K-MC-01]`、`[K-MC-02]`、`[K-MC-03]`。
 
 ### 3. Facial Element 参考计划
 
@@ -198,6 +206,8 @@ hands stay beside the cup; the right thumb tightens once and releases
 - Omni 的参考一致性等于精确表演驱动；
 - Motion Control 可以在没有动作视频或 Motion Library 时仅凭文字运行；
 - 时间分段正文可以覆盖或修正动作参考的精确节奏；
+- Standard 仅凭文字可以保证人物零根位移；
+- 固定镜头等同于人物站位固定；
 - 长对白口型必然稳定；
 - 表演类 Negative Prompt 稳定服从；
 - Kling 必然更外放、更适合身体或更适合所有对白。

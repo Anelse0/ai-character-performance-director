@@ -52,7 +52,31 @@ grep -q '^## Motion Control$' "${skill_root}/adapters/kling-3.md"
 grep -q '补充 Prompt 没有重复或冲突的动作时间线' "${skill_root}/references/quality-gates.md"
 grep -q 'Motion Control 输出契约' "${skill_root}/tests/acceptance-cases.md"
 grep -q 'Motion Control 不再要求动作来源必须是真人视频' "${skill_root}/tests/acceptance-cases.md"
+grep -q 'root_motion: allowed | bounded | locked' "${skill_root}/SKILL.md"
+grep -q '原地表演与根位移锁定' "${skill_root}/references/kling-motion-control.md"
+grep -q '待验证实验版本' "${skill_root}/adapters/kling-3.md"
+grep -q '原地表演与根位移' "${skill_root}/references/quality-gates.md"
+grep -q '原地表演与根位移锁定' "${skill_root}/tests/acceptance-cases.md"
+grep -q '\[K-MC-01\]' "${skill_root}/references/evidence-ledger.md"
+grep -q '\[USER-K3-01\]' "${skill_root}/references/evidence-ledger.md"
+grep -q '\[USER-K3-02\]' "${skill_root}/references/evidence-ledger.md"
+grep -q '\[K-I2V-01\]' "${skill_root}/references/evidence-ledger.md"
 grep -q '连续因果 prose' "${skill_root}/adapters/seedance-2.md"
+
+stationary_fixture="${skill_root}/tests/fixtures/kling3-standard-stationary-reunion.verified.md"
+test -f "${stationary_fixture}"
+grep -q '状态：`user_verified`' "${stationary_fixture}"
+grep -q '0–1.3s' "${stationary_fixture}"
+grep -q '1.3–2.8s' "${stationary_fixture}"
+grep -q '2.8–5.7s' "${stationary_fixture}"
+grep -q '5.7–8s' "${stationary_fixture}"
+grep -q '双脚持续承重' "${stationary_fixture}"
+grep -q '人物与镜头的距离保持不变' "${stationary_fixture}"
+grep -q '沿身体横向向左右打开' "${stationary_fixture}"
+if grep -Eq '【约|向镜头前倾|靠近镜头|迎接|拥抱|退回|回到原位|向前|向后|同时' "${stationary_fixture}"; then
+  echo "Stationary Kling regression fixture contains conflicting spatial language." >&2
+  exit 1
+fi
 
 while IFS= read -r relative_path; do
   test -e "${skill_root}/${relative_path}" || {
