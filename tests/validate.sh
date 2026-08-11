@@ -4,6 +4,7 @@ set -euo pipefail
 skill_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 required_files=(
+  "README.md"
   "SKILL.md"
   "agents/openai.yaml"
   "references/acting-core.md"
@@ -27,6 +28,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
+grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
+grep -q '^## 证据门禁$' "${skill_root}/README.md"
+grep -q 'kling3-standard-stationary-reunion.verified.md' "${skill_root}/README.md"
 grep -q 'actor_cut' "${skill_root}/SKILL.md"
 grep -q 'narrative' "${skill_root}/SKILL.md"
 grep -q 'Seedance 2.0 Prompt' "${skill_root}/SKILL.md"
