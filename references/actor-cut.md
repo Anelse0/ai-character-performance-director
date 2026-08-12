@@ -68,6 +68,8 @@
 
 “注意力始终给镜头前的人”表示行动持续指向 `target_person`，不等于运动过程中锁死眼珠。演员静止时建立清楚、符合关系的镜头眼神；头部或身体运动时，眼神在镜头目标区域内自然调整；动作落稳后重新建立明确对视。详细规则见 `references/kling-motion-control.md`。
 
+对镜招手、击掌、拥抱邀请、递接物件或镜头表面动作还必须读取 `references/interaction-performance.md`。先决定对象是否获准可见、隐藏后动作是否物理成立与可读，再编排情绪；不能用“演员 Cut”绕过实体门禁或接触依赖。
+
 ### 原地表演
 
 用户要求人物不位移时，提取 `spatial_lock: hard` 与 `root_motion: locked`，两者都是本 skill 的内部需求标签。若用户已经实测某个 Standard Prompt 出现位移，把该结果登记为限定范围的 `known_failure`，不得自行断言某个动作词是唯一原因。Kling 的证据边界、待验证 Standard 版本和 Motion Control 路由见 `references/kling-motion-control.md` 与 `references/evidence-ledger.md`。

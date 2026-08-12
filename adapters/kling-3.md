@@ -66,6 +66,22 @@ Kling Standard/Omni 的演员 Cut 情绪输出必须使用分段式 Prompt，不
 
 `t1/t2/t3` 只是说明动态边界的内部占位符，最终 Prompt 必须替换为具体数字。
 
+## 交互表演与实体契约
+
+交互任务先使用 `references/interaction-performance.md` 确定 `render_mode`，再进入 Standard、Omni、Multi-Shot 或 Motion Control 包装：
+
+- `source_preflight: block` 或 `render_mode: incompatible`：不输出 Kling Prompt，只输出素材/物理冲突和最低改动方案。
+- `direct_action`：正文只写主角色及其可见动作，不把想象对象具象化。
+- `implied_contact_experimental`：配置前明确“单边接触暗示（待验证）”；正文写角色一侧的起点、路径、表面朝向、停点与收势，不写对方已经回应或真实接触。
+- `invite_and_wait`：动作停在邀请、准备或让出空间，ending 保持等待；不能补写对方靠近、握住、接住或进入画面。
+- `visible_interaction`：只有实体契约允许且素材/角色责任清楚时才渲染双方互动。
+
+物体交换所需物体必须已在首帧出现或作为明确输入素材绑定；仅允许模型新增物体，不足以把接取、重量变化或结束归属写成可运行结果。
+
+硬排除时按所有权写画面契约：主角色自己的非动作手不等于外部手；只有用户明确限制身体范围时才要求它离开画面。正文优先使用一条正向主体状态和不变背景，不堆叠外部人物、其他手、影子、倒影和物体的同义否定。
+
+纯 Prompt 不能保证实体零增生；Motion Control 也不作为实体排除工具。两者都必须通过成片检查。
+
 ## Standard 单镜
 
 正文按以下逻辑组织：
@@ -82,6 +98,7 @@ End with [residue]. [bounded positive guardrails].
 - 动作按可见时间顺序书写。
 - 给动作次数和方向；避免抽象情绪堆叠。
 - 遇到跑、跳、转身或复合手势时，按 Motion Unit 写准备、主动作和收势，并补充必要的速度、方向、接触/支撑与镜头关系。
+- 交互手势同时写清决定动作身份的表面朝向与易混淆路径；不能只写“击掌、碰拳、握手”等动作名称。
 - Standard 中每个 beat 只保留一个主要表演意图；不同身体区域承担独立任务时先删减或串行，不能把多个任务都塞进“同时”。
 - 对镜表演若伴随转头或身体运动，写“静止时建立对视—运动时眼神自然调整—回正/落稳后重新对镜”，不要写“眼珠全程固定”或用“始终直视前方”制造锁眼冲突。
 - `root_motion: locked` 是内部需求标签，不伪装成官方配置。纯 Prompt 原地修复若尚无用户生成验证，必须标成“待验证实验版本”，不能宣称某组措辞可以锁定人物。
@@ -205,6 +222,7 @@ hands stay beside the cup; the right thumb tightens once and releases
 - Custom Multi-Shot 的逐镜时长等于镜内微表情关键帧控制；
 - Omni 的参考一致性等于精确表演驱动；
 - Motion Control 可以在没有动作视频或 Motion Library 时仅凭文字运行；
+- Motion Control 可以保证不新增交互对象、身体局部或物体；
 - 时间分段正文可以覆盖或修正动作参考的精确节奏；
 - Standard 仅凭文字可以保证人物零根位移；
 - 固定镜头等同于人物站位固定；

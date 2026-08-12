@@ -18,6 +18,8 @@
 
 Omni 可增强多参考、人物和声音连续性，但不等于精确动作驱动。Motion Control 的动作来自上传的动作视频或平台 Motion Library，不是仅靠正文 Prompt 生成。
 
+Motion Control 只解决动作来源与路径控制，不是实体排除工具。涉及隐藏对象、额外手、道具、影子或倒影时，仍须先执行 `references/interaction-performance.md` 的实体契约与首帧门禁；动作参考中已有的对象也不会因为正文禁用而被视为已清除。
+
 ## 复杂度对象
 
 只提取会改变工作流的字段：

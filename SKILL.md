@@ -1,6 +1,6 @@
 ---
 name: ai-character-performance-director
-description: 将角色意图、关系、刺激、情绪、对白、时长与镜头限制转换为有戏剧行动、可观察、可拍摄、非模板化的 AI 视频表演提示词，并可根据成片或 A/B 结果定位失效 Beat 后定向修正。支持演员 Cut 与实际剧情表演，默认同时适配 Seedance 2.0 和 Kling 3.0。凡涉及 AI 角色演技、微表演、听戏、台词表演、克制、情绪高潮、多人对手戏、成片演技评价或表演 Prompt，使用本 skill。
+description: 将角色意图、关系、刺激、情绪、对白、交互对象、时长与镜头限制转换为有戏剧行动、可观察、可拍摄、非模板化的 AI 视频表演提示词，并可根据成片或 A/B 结果定位失效 Beat 后定向修正。支持演员 Cut、实际剧情表演、对镜或画外交互、实体可见性约束，默认同时适配 Seedance 2.0 和 Kling 3.0。凡涉及 AI 角色演技、微表演、听戏、台词表演、角色与用户互动、招手、击掌、握手、拥抱、物体交换、禁止出现对方或额外身体局部、情绪高潮、多人对手戏、成片演技评价或表演 Prompt，使用本 skill。
 ---
 
 # AI Character Performance Director
@@ -37,6 +37,7 @@ description: 将角色意图、关系、刺激、情绪、对白、时长与镜�
 
 按需再读取：
 
+- 有对镜/画外交互、身体接触、物体交换、镜头表面动作、禁止出现对方/额外身体局部/无关物体，或成片出现交互对象增生与动作误读：`references/interaction-performance.md`
 - 有对白、画外音、听戏或多人话轮：`references/dialogue-listening.md`
 - 有崩溃、强忍泪、惊恐、压抑愤怒、表白、分手、背叛等阈值场面：`references/climax-failures.md`
 - 输出 Kling 且包含复杂动作、转头中的情绪变化、精确动作复现或 Motion Control：`references/kling-motion-control.md`
@@ -61,6 +62,23 @@ analysis_depth: auto | light | standard | deep
 style_contract:
 given_circumstances:
 target_person:
+interaction_class: unilateral_signal | brief_reciprocal_contact | sustained_contact | object_transfer | offscreen_audio | offscreen_physical | spatial_invitation | lens_interaction
+target_presence: visible | offscreen_audio | implied
+target_visualization: allowed | forbidden
+reciprocity: none | brief | sustained
+contact_requirement: none | implied | required
+external_support: none | person | object
+legibility_without_target: high | medium | low
+render_mode: direct_action | implied_contact_experimental | invite_and_wait | visible_interaction | incompatible
+entity_contract:
+  allowed_owners:
+  forbidden_owners:
+  allowed_existing_props:
+  new_entity_policy: allow | forbid
+  visible_body_scope:
+  reflection_policy: preserve | forbid_new
+  shadow_policy: preserve | forbid_new
+  source_preflight: pass | block
 scene_state:
 trigger:
 want:
@@ -132,7 +150,28 @@ style contract
 
 同一需求至少在内部考虑两个真正不同的 tactic。差异必须是人物如何影响对象，而不是更换表情或强度词。先通过用户硬要求，再依据关系、角色专属性、风格、镜头可读性和模型可执行性选择；不要调用固定情绪脸或行动动作词典。
 
-### 3. 评估 Kling 动作执行路径
+### 3. 编译交互可见性与动作可行性
+
+当场景存在交互对象、接触、物体交换、镜头表面动作或实体硬排除时，按 `references/interaction-performance.md` 执行：
+
+```text
+interaction class
+→ target visualization
+→ entity ownership and source preflight
+→ contact / support dependency
+→ legibility without target
+→ render mode
+→ action signature
+```
+
+- 先判断身体局部和物体归属，不把主角色自己的另一只手机械判成外部实体。
+- 硬排除请求必须通过首帧门禁；首帧不可检查或已含禁用实体时，不输出不可运行 Prompt。
+- 单向信号可直接渲染；短暂互惠动作只能作为待验证的接触暗示；持续接触和物体交换缺少必要对象时改为邀请等待或判定冲突。
+- 物体交换所需物体必须已经存在于首帧或作为明确输入素材绑定并获准保留；仅设置 `new_entity_policy: allow` 不能替代这一前提。
+- 隐藏对象时，内部保留戏剧目标，但模型正文只写获准主体及其动作，不虚构对方已经回应、接触、靠近或完成交换。
+- 按起点、路径、表面朝向、接触/支撑、停点、收势和易混淆动作建立最小动作签名；不要建立固定动作词典。
+
+### 4. 评估 Kling 动作执行路径
 
 仅在输出 Kling 时执行。先判断用户需要的是“近似生成”还是“精确复现”，再按 `references/kling-motion-control.md` 选择：
 
@@ -143,7 +182,7 @@ style contract
 
 若用户没有动作参考且 Motion Control 才能可靠满足要求，明确指出素材需求；不要把 Omni 当成精确动作驱动替代品。
 
-### 4. 组装可裁剪 Beat Graph
+### 5. 组装可裁剪 Beat Graph
 
 先按戏剧行动组织变化，再由 `references/acting-core.md` 映射为模型可见节点：
 
@@ -167,7 +206,7 @@ existing expectation / baseline
 - 高潮来自行动风险、控制破口、策略改变或结果确认，不只来自动作与表情变大。
 - 回落来自反馈或重新控制，不机械恢复开场中性状态。
 
-### 5. 分配表演通道
+### 6. 分配表演通道
 
 每个 beat 首轮只安排一个主要表演意图：
 
@@ -177,7 +216,7 @@ existing expectation / baseline
 
 动作必须同时满足：可见、有限、有方向、能排序、由刺激触发、服务角色目标。优先使用 `消失、停止、释放、返回、撤回、开始后中止` 等状态变化，而不是身体部位清单。
 
-### 6. 控制时长
+### 7. 控制时长
 
 - 4–6 秒：trigger → 一次可见 tactic → ending。
 - 7–10 秒：baseline → trigger → tactic → 可定位反馈或明确等待 → 一次调整或 ending。
@@ -185,7 +224,7 @@ existing expectation / baseline
 
 若信息超出预算，删减次要 beat 或拆镜；不要承诺镜内精确到秒的微动作。
 
-### 7. 渲染模型版本
+### 8. 渲染模型版本
 
 - Seedance：连续因果 prose，使用相对时序，突出单一表演弧。
 - Kling：把 UI/API 配置与正文分开；Custom Multi-Shot 每镜一个戏剧任务并给逐镜时长。
@@ -193,7 +232,7 @@ existing expectation / baseline
 
 模型适配只改变表达包装，不改变角色的核心行动逻辑。
 
-### 8. 质量检查与定向护栏
+### 9. 质量检查与定向护栏
 
 按 `references/quality-gates.md` 检查。护栏只针对当前已知或高概率失败，首轮保持少量、不冲突，并优先给正向替代：
 
@@ -216,11 +255,14 @@ existing expectation / baseline
 除非用户要求更短或更完整，按以下顺序输出：
 
 1. `模式判断`：模式、必要假设、模型选择。
-2. `导演逻辑`：一句话说明刺激、目标、策略和结束状态。
-3. `Seedance 2.0 Prompt`：仅在需要 Seedance 时输出。
-4. `Kling 3.0 配置` 与 `Kling 3.0 Prompt`：仅在需要 Kling 时输出；多镜逐镜列出。Motion Control 还要输出动作来源、Facial Element 参考计划和不与动作参考冲突的补充 Prompt；素材不足时同时给出缺口与可运行的 Standard 降级方案。
-5. `成功标准`：三条可从成片直接观察的标准。
-6. `不确定性 / 调试`：只写最主要的一条，不承诺硬控制。
+2. `交互处理`：仅在交互任务中输出 `直接动作 | 单边接触暗示（待验证） | 邀请并等待 | 需求冲突`。
+3. `导演逻辑`：一句话说明刺激、目标、策略和结束状态。
+4. `Seedance 2.0 Prompt`：仅在需要 Seedance 时输出。
+5. `Kling 3.0 配置` 与 `Kling 3.0 Prompt`：仅在需要 Kling 时输出；多镜逐镜列出。Motion Control 还要输出动作来源、Facial Element 参考计划和不与动作参考冲突的补充 Prompt；素材不足时同时给出缺口与可运行的 Standard 降级方案。
+6. `成功标准`：三条可从成片直接观察的标准；交互任务分别检查实体许可、动作可读性和结束状态。
+7. `不确定性 / 调试`：只写最主要的一条，不承诺硬控制。
+
+若交互任务触发 `source_preflight: block` 或 `render_mode: incompatible`，不要输出不可运行 Prompt；改为输出冲突、最低改动的素材/动作方案及继续生成所需条件。
 
 Prompt 本体应可直接复制；分析要短，不复述用户剧情。
 
@@ -235,6 +277,8 @@ Prompt 本体应可直接复制；分析要短，不复述用户剧情。
 - 不把 FACS、微表情、眨眼率或吞咽当成读心密码。
 - 不用 `cinematic / realistic / deeply emotional` 替代具体动作。
 - 不让所有角色同时表演；每个 beat 指定 reaction owner。
+- 不把“没有生成对方”直接判为交互动作成功，也不把一次动作可读判为实体排除稳定。
+- 不在对象不可见时虚构持续接触、承重、拉力、物体转移或对方已经回应。
 - 不堆叠眉、眼、嘴、呼吸、肩、手、重心和镜头运动。
 - 不默认峰值从第一帧开始，也不强迫所有场景先延迟再反应。
 - 不承诺精确镜内秒点、完美口型、负面提示词服从或模型绝对优劣。

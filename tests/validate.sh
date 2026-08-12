@@ -12,6 +12,7 @@ required_files=(
   "references/acting-core.md"
   "references/actor-cut.md"
   "references/narrative-performance.md"
+  "references/interaction-performance.md"
   "references/dialogue-listening.md"
   "references/climax-failures.md"
   "references/kling-motion-control.md"
@@ -23,6 +24,7 @@ required_files=(
   "adapters/kling-3.md"
   "tests/acceptance-cases.md"
   "tests/fixtures/acting-craft-forward-tests-v1.1.0.md"
+  "tests/fixtures/interaction-performance-forward-tests-v1.2.0.md"
 )
 
 for path in "${required_files[@]}"; do
@@ -33,9 +35,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.1\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10100$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.1.0`；version code：`10100`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.2\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10200$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.2.0`；version code：`10200`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q 'kling3-standard-stationary-reunion.verified.md' "${skill_root}/README.md"
@@ -46,9 +48,24 @@ grep -q 'Kling 3.0' "${skill_root}/SKILL.md"
 grep -q '不把 FACS' "${skill_root}/SKILL.md"
 grep -q 'references/acting-craft.md' "${skill_root}/SKILL.md"
 grep -q 'references/performance-review.md' "${skill_root}/SKILL.md"
+grep -q 'references/interaction-performance.md' "${skill_root}/SKILL.md"
 grep -q 'analysis_depth: auto | light | standard | deep' "${skill_root}/SKILL.md"
 grep -q 'target_person:' "${skill_root}/SKILL.md"
 grep -q 'turning_trigger:' "${skill_root}/SKILL.md"
+grep -q 'interaction_class: unilateral_signal | brief_reciprocal_contact | sustained_contact | object_transfer | offscreen_audio | offscreen_physical | spatial_invitation | lens_interaction' "${skill_root}/SKILL.md"
+grep -q 'target_visualization: allowed | forbidden' "${skill_root}/SKILL.md"
+grep -q 'render_mode: direct_action | implied_contact_experimental | invite_and_wait | visible_interaction | incompatible' "${skill_root}/SKILL.md"
+grep -q 'entity_contract:' "${skill_root}/SKILL.md"
+grep -q 'allowed_owners:' "${skill_root}/SKILL.md"
+grep -q 'forbidden_owners:' "${skill_root}/SKILL.md"
+grep -q 'allowed_existing_props:' "${skill_root}/SKILL.md"
+grep -q 'new_entity_policy: allow | forbid' "${skill_root}/SKILL.md"
+grep -q 'reflection_policy: preserve | forbid_new' "${skill_root}/SKILL.md"
+grep -q 'shadow_policy: preserve | forbid_new' "${skill_root}/SKILL.md"
+grep -q 'source_preflight: pass | block' "${skill_root}/SKILL.md"
+grep -q '^### 3\. 编译交互可见性与动作可行性$' "${skill_root}/SKILL.md"
+grep -q '`交互处理`：仅在交互任务中输出' "${skill_root}/SKILL.md"
+grep -q 'source_preflight: block.*render_mode: incompatible' "${skill_root}/SKILL.md"
 grep -q '至少在内部考虑两个真正不同的 tactic' "${skill_root}/SKILL.md"
 grep -q '4–6 秒：trigger → 一次可见 tactic → ending' "${skill_root}/SKILL.md"
 grep -q '7–10 秒：baseline → trigger → tactic → 可定位反馈或明确等待 → 一次调整或 ending' "${skill_root}/SKILL.md"
@@ -104,6 +121,57 @@ grep -q '^## G\. 演技提升引擎$' "${skill_root}/tests/acceptance-cases.md"
 grep -q '不能宣称实际成片演技成立' "${skill_root}/tests/acceptance-cases.md"
 grep -q '不使用综合演技总分' "${skill_root}/tests/acceptance-cases.md"
 
+interaction_reference="${skill_root}/references/interaction-performance.md"
+grep -q '^## 目录$' "${interaction_reference}"
+grep -q '^## 3\. 可见实体契约$' "${interaction_reference}"
+grep -q 'allowed_owners: \[primary_character\]' "${interaction_reference}"
+grep -q 'allowed_existing_props: \[\]' "${interaction_reference}"
+grep -q 'source_preflight: pass | block' "${interaction_reference}"
+grep -q '^## 5\. 交互类型路由$' "${interaction_reference}"
+grep -q 'brief_reciprocal_contact' "${interaction_reference}"
+grep -q 'sustained_contact' "${interaction_reference}"
+grep -q 'object_transfer' "${interaction_reference}"
+grep -q 'offscreen_physical' "${interaction_reference}"
+grep -q 'lens_interaction' "${interaction_reference}"
+grep -q '^## 6\. 动作识别度编译$' "${interaction_reference}"
+grep -q 'surface_orientation:' "${interaction_reference}"
+grep -q 'confusable_actions:' "${interaction_reference}"
+grep -q 'implied_contact_experimental' "${interaction_reference}"
+grep -q '`new_entity_policy: allow`.*不能替代物体交换所需物体' "${interaction_reference}"
+grep -q '观众能读出击掌邀请与一次接触暗示' "${interaction_reference}"
+grep -q '至少三次同模型、工作流、首帧、时长和 Prompt 的生成全部通过' "${interaction_reference}"
+
+grep -q '实体门禁或接触依赖' "${skill_root}/references/actor-cut.md"
+grep -q '实体所有权和物理依赖' "${skill_root}/references/narrative-performance.md"
+grep -q 'Motion Control 只解决动作来源与路径控制，不是实体排除工具' "${skill_root}/references/kling-motion-control.md"
+grep -q 'render_mode' "${skill_root}/adapters/kling-3.md"
+grep -q 'render_mode' "${skill_root}/adapters/seedance-2.md"
+grep -q 'interaction_rendering:' "${skill_root}/adapters/adapter-contract.md"
+grep -q 'entity_constraint_boundary:' "${skill_root}/adapters/adapter-contract.md"
+grep -q '不能把 `incompatible` 改写成可运行 Prompt' "${skill_root}/adapters/adapter-contract.md"
+grep -q '^## C1\. 交互表演与实体可见性$' "${skill_root}/references/quality-gates.md"
+grep -q 'entity_compliance' "${skill_root}/references/performance-review.md"
+grep -q '\[K-I2V-02\]' "${skill_root}/references/evidence-ledger.md"
+grep -q '\[USER-K3-03\]' "${skill_root}/references/evidence-ledger.md"
+grep -q '\[USER-K3-04\]' "${skill_root}/references/evidence-ledger.md"
+grep -q '\[USER-INTERACTION-01\]' "${skill_root}/references/evidence-ledger.md"
+grep -q '^## H\. 角色交互表演引擎$' "${skill_root}/tests/acceptance-cases.md"
+for case_id in H1 H2 H3 H4 H5 H6 H7 H8 H9 H10; do
+  grep -q "^### ${case_id}" "${skill_root}/tests/acceptance-cases.md" || {
+    echo "Missing interaction acceptance case: ${case_id}" >&2
+    exit 1
+  }
+done
+for interaction_example in 招手致意 召唤注意 制止 指方向 飞吻 比心 击掌 碰拳 轻碰 握手 拥抱 牵手 搀扶 拉人 递杯 接手机 收礼物 喂食 呼唤 警告 提问 打断 拍肩 拉住 触碰 让座 示意靠近 示意进入 敲镜头 擦镜头 遮镜头; do
+  grep -q "${interaction_example}" "${skill_root}/tests/acceptance-cases.md" || {
+    echo "Missing interaction regression example: ${interaction_example}" >&2
+    exit 1
+  }
+done
+grep -q '第二人物、外部身体局部、无关道具、未知归属影子和未知归属倒影' "${skill_root}/tests/acceptance-cases.md"
+grep -q '仅设置 `new_entity_policy: allow` 不能代替物体存在或素材绑定' "${skill_root}/tests/acceptance-cases.md"
+grep -q '观众能读出击掌邀请及接触暗示' "${skill_root}/tests/acceptance-cases.md"
+
 craft_fixture="${skill_root}/tests/fixtures/acting-craft-forward-tests-v1.1.0.md"
 grep -q '状态：`executed_self_forward_test`' "${craft_fixture}"
 grep -q 'version code：`10100`' "${craft_fixture}"
@@ -126,6 +194,51 @@ prompt_outputs="$(awk '
 ' "${craft_fixture}")"
 if grep -Eq 'analysis_depth:|style_contract:|stakes:|obstacle:|expected_effect:|turning_trigger:|候选 tactic' <<<"${prompt_outputs}"; then
   echo "Forward-test Prompt output leaks internal acting-analysis fields." >&2
+  exit 1
+fi
+
+interaction_fixture="${skill_root}/tests/fixtures/interaction-performance-forward-tests-v1.2.0.md"
+grep -q '状态：`executed_self_forward_test`' "${interaction_fixture}"
+grep -q '版本：`1.2.0`；version code：`10200`' "${interaction_fixture}"
+grep -q '不是独立盲测、Kling/Seedance 生成结果或用户成片验证' "${interaction_fixture}"
+for case_id in I1 I2 I3 I4 I5 I6 I7 I8 I9 I10; do
+  grep -q "^## ${case_id}" "${interaction_fixture}" || {
+    echo "Missing interaction forward test: ${case_id}" >&2
+    exit 1
+  }
+done
+for interaction_example in 招手致意 召唤注意 制止 指方向 飞吻 比心 碰拳 轻碰 搀扶 拉人 递杯 接手机 收礼物 喂食 呼唤 警告 提问 打断 拍肩 拉住 触碰 让座 示意靠近 示意进入 敲镜头 擦镜头 遮镜头; do
+  grep -q "${interaction_example}" "${interaction_fixture}" || {
+    echo "Missing interaction forward-test example: ${interaction_example}" >&2
+    exit 1
+  }
+done
+grep -q '第二人物、外部身体局部、无关道具、未知归属影子和未知归属倒影' "${interaction_fixture}"
+grep -q '观众能否读出击掌邀请与接触暗示' "${interaction_fixture}"
+
+interaction_prompt_start_count="$(grep -c '<!-- PROMPT_OUTPUT_START -->' "${interaction_fixture}")"
+interaction_prompt_end_count="$(grep -c '<!-- PROMPT_OUTPUT_END -->' "${interaction_fixture}")"
+test "${interaction_prompt_start_count}" -eq 3
+test "${interaction_prompt_end_count}" -eq 3
+
+interaction_prompt_outputs="$(awk '
+  /<!-- PROMPT_OUTPUT_START -->/ { in_prompt=1; next }
+  /<!-- PROMPT_OUTPUT_END -->/ { in_prompt=0; next }
+  in_prompt { print }
+' "${interaction_fixture}")"
+if grep -Eq 'interaction_class:|target_presence:|target_visualization:|reciprocity:|contact_requirement:|external_support:|legibility_without_target:|render_mode:|entity_contract:|source_preflight:' <<<"${interaction_prompt_outputs}"; then
+  echo "Interaction forward-test Prompt output leaks internal interaction fields." >&2
+  exit 1
+fi
+
+for required_phrase in '身体同侧' '手掌保持竖直' '手指朝上' '完整掌面朝向镜头' '短距离前送' '轻微回弹' '不横跨胸前或脸部'; do
+  grep -q "${required_phrase}" <<<"${interaction_prompt_outputs}" || {
+    echo "High-five forward test missing: ${required_phrase}" >&2
+    exit 1
+  }
+done
+if grep -Eq '对方(已经|终于).*(回应|靠近|接触)|完成(了)?(真实)?接触|接住(了)?对方|对方已经坐下' <<<"${interaction_prompt_outputs}"; then
+  echo "Interaction forward-test Prompt invents hidden-target feedback or completion." >&2
   exit 1
 fi
 

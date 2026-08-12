@@ -42,6 +42,22 @@ and [optional visible support]. [Direct action or control/redirect]. Only then,
 
 这不是填空模板。句子数量、节点与顺序必须按场景裁剪；不需要的 control、dialogue 或 release 应删除。
 
+## 交互表演与实体契约
+
+Seedance 与 Kling 共用 `references/interaction-performance.md` 的交互分类、实体契约、首帧门禁和物理可行性结论：
+
+- `source_preflight: block` 或 `render_mode: incompatible` 时不输出 Prompt；
+- `render_mode: direct_action` 时只写主角色一侧可独立成立的交流行动；
+- `render_mode: implied_contact_experimental` 时明确这是待验证的接触暗示；
+- `render_mode: invite_and_wait` 时把 ending 停在邀请与等待；
+- 隐藏对象时，连续 prose 只写获准主体的动作，不虚构对方回应、持续接触、承重或物体交换；
+- 短暂互惠动作只能称为待验证的接触暗示，并用相对时序写清动作路径、表面朝向、停点和收势；
+- 空间邀请以等待结束，不把画外对象写成已经进入画面；
+- 物体交换所需物体必须已在首帧出现或作为明确输入素材绑定；仅允许新增物体不满足交换前提；
+- 实体排除与动作可读性分别作为成功标准。
+
+这些规则只控制 Prompt 决策，不构成 Seedance 对实体排除或接触动作稳定性的保证。
+
 ## 剧情与多镜
 
 - 连续互动能在 3–5 个主 beats 内完成时优先单镜，保留 onset 与互动连续性。

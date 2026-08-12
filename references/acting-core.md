@@ -28,6 +28,19 @@
 7. `display_policy / intensity`：公开、克制、否认或改道，以及可承载的破口程度。
 8. `ending`：行动后留下的关系、任务或身体状态。
 
+若场景包含对镜/画外交互、身体接触、物体交换、镜头表面动作或实体硬排除，还要从 `references/interaction-performance.md` 接收：
+
+```yaml
+interaction_class:
+target_visualization:
+contact_requirement:
+external_support:
+legibility_without_target:
+render_mode:
+entity_contract:
+action_signature:
+```
+
 字段不足或策略仍是“表现某种情绪”时，返回 `references/acting-craft.md` 补足；不要直接查找动作。
 
 ## 3. 策略可见性检查
@@ -40,6 +53,16 @@
 - 载体不违反用户硬约束；
 - 同一策略只保留一个主要身体语法，避免同义动作重复；
 - 反馈若不存在，不把角色自己的情绪变化伪装成对方回应。
+
+交互任务额外检查：
+
+- 实体许可按所有权判断，主角色自己的身体与外部对象没有混为一类；
+- 硬排除已经通过首帧门禁；未通过时停止编译 Prompt；
+- 隐藏对象后，动作不依赖不存在的持续支撑、重量、拉力或物体转移；
+- 物体交换所需物体已经存在于首帧或作为输入素材明确绑定并获准保留，没有用“允许新增”替代存在性检查；
+- `implied_contact_experimental` 只描述接触暗示，不声称对方真实完成动作；
+- 起点、主路径、关键表面朝向、停点和收势足以区分易混淆动作；
+- 实体排除和动作可读性分别有验收条件。
 
 ### 非模板性自检
 
@@ -96,6 +119,8 @@
 4. 必须精确同步或完整保留时，交给对应模型的动作控制工作流。
 
 Motion Unit 的机械拆解、速度、方向、接触与收势规则见 `references/kling-motion-control.md`。
+
+交互动作还要按 `references/interaction-performance.md` 保留决定动作身份的最小签名。动作名称本身不能替代路径或表面朝向；若隐藏对象后识别度低、物理依赖无法消除，改为邀请等待或返回需求冲突，不能通过增加动作零件硬凑完成感。
 
 ## 6. 可观察语言
 
