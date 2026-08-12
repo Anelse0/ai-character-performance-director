@@ -15,8 +15,9 @@
 ```text
 event
 → reaction owner
-→ action choice
-→ other character response
+→ tactic toward a target
+→ other character response or absent response
+→ tactic adjustment
 → narrative consequence
 ```
 
@@ -48,6 +49,15 @@ beat_1:
 - 中断对方的动作，而不是仅做更强表情。
 
 手势、视线和呼吸应服务这些行动，不应成为独立装饰。
+
+## 行动与反馈
+
+每个主要角色行动先明确：人物想让谁发生什么变化、采取什么 tactic、预期得到什么反馈。反馈可以是对方的台词、停顿、动作或明确的不回应。
+
+- 倾听必须改变听者下一步 tactic；仅维持反应表情不构成剧情表演。
+- 对方没有回应时，角色可以继续、升级、改道或停止，但不能无依据写成“得到理解”。
+- 高潮来自策略风险、控制破口、行动不可逆或关系结果确认，不只来自所有角色同时增强情绪。
+- ending 保留行动造成的信息、关系、距离、物件或决定变化。
 
 ## 单镜与多镜决策
 

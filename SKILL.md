@@ -1,15 +1,15 @@
 ---
 name: ai-character-performance-director
-description: 将角色意图、关系、刺激、情绪、对白、时长与镜头限制转换为可观察、可拍摄、非模板化的 AI 视频表演提示词。支持演员 Cut 与实际剧情表演，默认同时适配 Seedance 2.0 和 Kling 3.0。凡涉及 AI 角色演技、微表演、听戏、台词表演、克制、情绪高潮、多人对手戏或表演 Prompt，使用本 skill。
+description: 将角色意图、关系、刺激、情绪、对白、时长与镜头限制转换为有戏剧行动、可观察、可拍摄、非模板化的 AI 视频表演提示词，并可根据成片或 A/B 结果定位失效 Beat 后定向修正。支持演员 Cut 与实际剧情表演，默认同时适配 Seedance 2.0 和 Kling 3.0。凡涉及 AI 角色演技、微表演、听戏、台词表演、克制、情绪高潮、多人对手戏、成片演技评价或表演 Prompt，使用本 skill。
 ---
 
 # AI Character Performance Director
 
-把“角色感到什么”转换成“镜头里因何、按什么顺序发生哪些可观察变化”。不要把情绪词直接映射成固定表情，不要把行为线索当成心理诊断。
+把“角色感到什么”先转换成“角色正对谁采取什么行动、希望改变什么”，再编译为镜头里有因果顺序的可观察变化。情绪是行动成功、受阻或改变策略后的场景结果，不是固定表情检索词；行为线索也不是心理诊断。
 
 ## 工作边界
 
-本 skill 负责表演设计与模型 Prompt 渲染，不负责扩写完整故事、制作全片分镜或替用户决定与表演无关的美术风格。若用户已提供剧情，只补足表演所必需的信息。
+本 skill 负责表演策略、模型 Prompt 渲染，以及用户提供成片后的定向反馈；不负责扩写完整故事、制作全片分镜或替用户决定与表演无关的美术风格。若用户已提供剧情，只补足表演所必需的信息。
 
 支持两种模式：
 
@@ -18,11 +18,19 @@ description: 将角色意图、关系、刺激、情绪、对白、时长与镜�
 
 用户明确写“演员 Cut / Actor Cut / 剧情表演”时服从指定；否则自动判断。模式判断不确定但两种结果会实质不同时，只问一个简短问题。
 
-## 必须读取的规则
+## 读取规则
 
-每次调用先读取：
+设计表演、生成 Prompt 或根据反馈输出修正版 Prompt 时读取：
 
-1. `references/acting-core.md`
+1. `references/acting-craft.md`
+2. `references/acting-core.md`
+3. 与模式对应的 `references/actor-cut.md` 或 `references/narrative-performance.md`
+4. `references/quality-gates.md`
+5. `references/evidence-ledger.md`
+
+只评价成片或比较 Take、不生成修正版 Prompt 时读取：
+
+1. `references/performance-review.md`
 2. 与模式对应的 `references/actor-cut.md` 或 `references/narrative-performance.md`
 3. `references/quality-gates.md`
 4. `references/evidence-ledger.md`
@@ -35,6 +43,7 @@ description: 将角色意图、关系、刺激、情绪、对白、时长与镜�
 - 输出 Seedance：`adapters/seedance-2.md`
 - 输出 Kling：`adapters/kling-3.md`
 - 扩展新模型适配器：`adapters/adapter-contract.md`
+- 根据成片或多个 Take 输出修正版 Prompt：先读取 `references/performance-review.md` 完成诊断，再进入完整表演设计流程。
 
 不要为了“更完整”加载与当前请求无关的参考。
 
@@ -48,12 +57,20 @@ model: both | seedance2 | kling3_standard | kling3_omni | kling3_motion_control
 duration:
 characters:
 relationship:
+analysis_depth: auto | light | standard | deep
+style_contract:
+given_circumstances:
+target_person:
 scene_state:
 trigger:
 want:
+stakes:
+obstacle:
+tactic:
+expected_effect:
+turning_trigger:
 hide_or_conflict:
 display_policy: reveal | restrain | deny | redirect
-playable_strategy:
 intensity: L1_leak | L2_breach | L3_dysregulation
 dialogue:
 shot_constraints:
@@ -98,15 +115,22 @@ root_motion: allowed | bounded | locked
 
 ### 2. 建立角色行动逻辑
 
-先确定：
+按 `references/acting-craft.md` 选择最低够用的分析深度，再确定：
 
 ```text
-relationship → current WANT → optional HIDE/CONFLICT → trigger → playable strategy
+style contract
+→ given circumstances
+→ target person
+→ WANT
+→ optional obstacle / stakes / HIDE-CONFLICT
+→ tactic
+→ expected effect
+→ turning trigger
 ```
 
-`WANT` 是角色此刻试图取得的结果。只有克制、否认、改道或内在冲突存在时才补 `HIDE/CONFLICT`。
+`WANT` 是角色希望对象做出、停止或允许的变化；`tactic` 是角色为了影响对象而正在做什么。只有场景确有阻力、风险、克制、否认、改道或内在冲突时，才补对应字段。
 
-同一情绪至少在内部考虑两个不同策略，再依据关系、目标和剧情阶段选择。例如担忧可以表现为靠近帮助、保持距离照顾、否认转移话题或直接解决问题。不要调用固定“担忧脸”。
+同一需求至少在内部考虑两个真正不同的 tactic。差异必须是人物如何影响对象，而不是更换表情或强度词。先通过用户硬要求，再依据关系、角色专属性、风格、镜头可读性和模型可执行性选择；不要调用固定情绪脸或行动动作词典。
 
 ### 3. 评估 Kling 动作执行路径
 
@@ -121,16 +145,15 @@ relationship → current WANT → optional HIDE/CONFLICT → trigger → playabl
 
 ### 4. 组装可裁剪 Beat Graph
 
-按场景需要选择节点，不强迫走完整链条：
+先按戏剧行动组织变化，再由 `references/acting-core.md` 映射为模型可见节点：
 
 ```text
-baseline
-→ trigger
-→ immediate orient OR short processing
-→ first observable change
-→ action / control / redirect / choice
-→ optional threshold and brief release
-→ explicit end state
+existing expectation / baseline
+→ received trigger
+→ tactic becomes observable
+→ actual or absent feedback
+→ persist / escalate / redirect / stop
+→ relationship or task residue
 ```
 
 允许：
@@ -140,6 +163,9 @@ baseline
 - 从高潮中段切入；
 - 在阈值处有意切断；
 - 克制成功直接成为结局。
+- 没有可定位反馈时，以等待、继续争取或主动结束收束，不伪造“终于得到回应”。
+- 高潮来自行动风险、控制破口、策略改变或结果确认，不只来自动作与表情变大。
+- 回落来自反馈或重新控制，不机械恢复开场中性状态。
 
 ### 5. 分配表演通道
 
@@ -153,9 +179,9 @@ baseline
 
 ### 6. 控制时长
 
-- 4–6 秒：刺激 → 第一次变化 → 结束状态。
-- 7–10 秒：基线 → 刺激 → 处理 → 行动/选择 → 结束状态。
-- 11–15 秒：可增加一次失败恢复、短对白、听者反应或短促释放。
+- 4–6 秒：trigger → 一次可见 tactic → ending。
+- 7–10 秒：baseline → trigger → tactic → 可定位反馈或明确等待 → 一次调整或 ending。
+- 11–15 秒：可增加一次策略改道、失败恢复、短对白或听者反馈。
 
 若信息超出预算，删减次要 beat 或拆镜；不要承诺镜内精确到秒的微动作。
 
@@ -183,6 +209,8 @@ baseline
 - 尚未获得官方依据或用户生成结果的修复，只能作为“待验证实验版本”输出，不能写入稳定规则或宣称已修复；
 - 证据状态与编号统一记录在 `references/evidence-ledger.md`。
 
+用户提供成片或多个 Take 时，先按 `references/performance-review.md` 区分需求偏差、模型伪影、表演策略和呈现干扰，定位最先失效的 Beat。只修正该节点及其下游，再返回正常表演设计与模型渲染流程；不以评价报告替代改进。
+
 ## 默认输出
 
 除非用户要求更短或更完整，按以下顺序输出：
@@ -198,9 +226,12 @@ Prompt 本体应可直接复制；分析要短，不复述用户剧情。
 
 当输出 Kling Standard/Omni 演员 Cut 情绪 Prompt 时，分段框架属于 Prompt 本体，不额外输出一份连续 prose 版本。Motion Control 按专用输出契约执行。
 
+若用户只要求成片评价，按 `references/performance-review.md` 输出简短的结论、问题归属、可观察证据和一项最高收益修正；没有成片时只能评价设计风险。用户要求修正版 Prompt 时，再使用上述默认输出契约。
+
 ## 禁止事项
 
 - 不把悲伤、内疚、爱意等写成固定面部或身体指纹。
+- 不建立固定的“行动动词—身体动作”词典。
 - 不把 FACS、微表情、眨眼率或吞咽当成读心密码。
 - 不用 `cinematic / realistic / deeply emotional` 替代具体动作。
 - 不让所有角色同时表演；每个 beat 指定 reaction owner。

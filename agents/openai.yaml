@@ -1,4 +1,4 @@
 interface:
   display_name: "AI 角色表演导演"
-  short_description: "将角色意图与情绪转换为非模板化、可观察的 AI 视频表演 Prompt"
-  default_prompt: "使用 $ai-character-performance-director，把我的角色与场景描述转换为演员 Cut 或剧情表演，并生成 Seedance 2.0 与 Kling 3.0 提示词。"
+  short_description: "以戏剧行动和逐刻反馈生成非模板化 AI 角色表演 Prompt"
+  default_prompt: "使用 $ai-character-performance-director，从角色的对象、目标、策略和反馈设计演员 Cut 或剧情表演，并生成 Seedance 2.0 与 Kling 3.0 提示词。"
