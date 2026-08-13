@@ -26,9 +26,69 @@ facial_element_binding:
 orientation:
 root_motion: allowed | bounded | locked
 spatial_control: prompt_only | motion_control
+camera_execution: prompt | ui_control | start_end_frames | video_reference | custom_multishot
+camera_control:
+camera_start_frame:
+camera_end_frame:
+camera_reference:
+camera_execution_status: supported | experimental
 ```
 
 `reaction owner`、`visible sequence`、`end state`、`acting guardrail` 是创作规划概念，不是官方字段。可在分析中使用，但最终应渲染为普通正文。
+
+## 镜头设计与执行来源
+
+先从 `references/camera-direction.md` 接收 Camera Unit，再选择 Kling 当前入口能够承担的执行来源。运镜复杂度本身不触发 Omni；Omni 仍只在人物、物体、场景、声音或多参考连续性确有需要时使用。
+
+### Prompt 运镜
+
+依据 `[K-CAM-01]`：
+
+- 正文写清 camera subject、起幅、一个主要运镜、方向、速度/稳定性质、主体配合和落幅；
+- 把运镜连接到主体动作或场景揭示，不能只写 `cinematic camera movement`；
+- 一个单镜优先一个主要 camera action；辅助 pan/tilt 只能维持构图；
+- 人物转身、行走、表情变化与手势已经复杂时，删减运镜或拆镜；
+- 起幅与落幅必须包含可见主体或环境，不能只写抽象情绪变化；
+- 结果仍具有概率性，清楚的正文不等于精确路径保证。
+
+### UI Camera Movement
+
+当前入口若提供独立 Camera Movement 控件，可依据 `[K-CAM-02]` 选择水平、垂直、zoom、pan、tilt、roll 或入口提供的组合运动，并把幅度留在 UI 配置中：
+
+- `camera_execution: ui_control`；
+- 配置区写概念选择和方向/幅度，正文只保留镜头目的、主体动作、起落幅与一致的运动关系；
+- 正文不得再要求另一条相反或复合路径；
+- 实际入口没有该控件时回退 Prompt 或其他可用工作流，不伪造 API 字段。
+
+### Start/End Frames
+
+Kling 3.0 官方入口支持 Start & End Frames。使用时：
+
+- 两张素材分别承担 `start_frame` 与 `end_frame`；
+- 正文只说明两端之间的主要空间变化和主体连续性；
+- 端点可以锚定构图，不代表中间轨迹、速度曲线或遮挡处理能够精确复现；
+- 两端人物身份、场景几何或物件状态不兼容时，先修素材，不用 Prompt 强行补间。
+
+### 镜头参考
+
+依据 `[K-CAM-01]`，Kling 的镜头规划可结合文本、参考图像、视频输入或 storyboard instructions；但普通 Element 视频在 `[K-CAM-03]` 中首先承担人物、物体或场景连续性，不等同于精确相机轨迹来源：
+
+- 当前入口明确允许把视频或分镜绑定为镜头参考时，可使用 `camera_execution: video_reference`，并把构图关系、运动节奏或观看顺序写成素材职责；
+- 若入口未明确该职责，只把素材当创意参考并标记 `experimental`，不能宣称路径复现；
+- 正文不得与参考规定第二条竞争路径；需要精确同步时继续简化或拆镜。
+
+### 复合与实验运镜
+
+完整环绕、复合升降加横移、dolly zoom、长距离 oner、精确多轴同步或镜头与复杂人物动作同时变化，默认 `experimental`。依次处理：
+
+1. 保留 camera intent，删到一个主路径；
+2. 把辅助运动降为构图修正；
+3. 复杂性来自多个观看任务时改用 Custom Multi-Shot；
+4. 当前入口有镜头参考职责时可改用参考引导；没有时不把普通视频元素或人物 Motion Control 称为精确相机路径来源。
+
+### Environment 模式
+
+环境空镜不套用演员 Cut 时间分段。正文按 `场景基线 → Camera Unit 触发 → 主路径 → 落幅 → 环境稳定护栏` 写成连续单镜，或使用 Custom Multi-Shot 拆成不同环境信息任务。航拍、俯拍或手持只说明视点/质感，仍必须写主路径和结束构图。
 
 ## Standard/Omni 演员 Cut 情绪 Prompt：强制输出框架
 
@@ -106,15 +166,18 @@ End with [residue]. [bounded positive guardrails].
 - Standard 已被用户实测出现走近/退回时，先修正文的空间语义：在开头定义站定、足底承重和人物—镜头距离不变；各 beat 只写允许的局部动作及其方向；删除与零位移目标竞争的前后向动作和“回到原位”式返回任务。该写法依据官方“主体＋运动状态”、可见方向/接触/镜头关系及减少竞争动作的指南，并已在 `[USER-K3-02]` 的同条件测试中验证可行；超出该条件范围时重新验收。
 - 台词前先动作，台词后嘴部停止发音。
 - 单镜内只保留一个主表演弧。
+- Camera Unit 与人物动作按可见顺序相邻；写清镜头何时因人物动作或环境揭示开始、如何保持主体关系、在哪里停止。
+- 单镜已有明显人物复合动作时，镜头保持固定关系或只做一个简单跟随；不得再叠加独立推进、环绕和升降。
 - 若单镜属于演员 Cut 情绪表演，使用上一节的强制分段框架；其他 Standard 单镜仍可使用连续正文。
 
 ## Custom Multi-Shot
 
-每个 shot 单独提供 `duration + prompt/content`，总时长与平台限制一致。合作方入口可能在 customize 模式忽略主 Prompt，因此不要假设一个总 Prompt 能替代逐镜内容。
+每个 shot 单独提供 `duration + prompt/content`，总时长与平台限制一致。依据 `[K-MS-02]`，Kling 3.0 当前官方入口支持 3–15 秒、最多 6 镜；合作方入口可能不同，实际不可用时按入口降级。不要假设一个总 Prompt 能替代逐镜内容。
 
 规划规则：
 
 - 每镜一个戏剧任务；
+- 每镜一个 Camera Unit；换角度但不增加动作、信息、关系或节奏责任的镜头应删除；
 - 一个屏幕内 speaker 或一个 reaction owner；
 - 逐镜时长用于镜头段落，不承诺镜内微动作精确卡秒；
 - 上一镜 residue 写入下一镜 baseline；
@@ -140,11 +203,13 @@ End with [residue]. [bounded positive guardrails].
 ```
 ````
 
-镜头数量按实际入口支持范围控制。若入口不明，提醒用户核对字段和镜头上限，不给虚构参数名。
+镜头数量按实际入口支持范围控制，最多使用当前官方上限 6 镜。合作方入口不明时提醒用户核对，不给虚构参数名。
 
 ## Motion Control
 
 Motion Control 由动作视频或 Motion Library 提供人物动作与表情过程。正文 Prompt 只补充不与动作参考冲突的信息，不再用演员 Cut 时间分段重复编排动作。
+
+Motion Control 不是相机路径控制。动作参考中的摄影机运动若影响动作读取，应按当前官方素材建议处理；本 skill 不把人物动作参考、Facial Element 或普通补充 Prompt 宣称为精确运镜来源。
 
 输出必须包含四部分：
 
@@ -226,6 +291,11 @@ hands stay beside the cup; the right thumb tightens once and releases
 - 时间分段正文可以覆盖或修正动作参考的精确节奏；
 - Standard 仅凭文字可以保证人物零根位移；
 - 固定镜头等同于人物站位固定；
+- Start/End Frames 等同于中间相机路径精确；
+- UI Camera Movement 与正文里的冲突运镜可以同时成立；
+- Motion Control、人物视频元素或 Facial Element 可以精确驱动相机路径；
+- `aerial / handheld / POV / oner` 本身已经构成完整运镜；
+- `cinematic / sweeping / blockbuster` 可以替代起幅、方向、停止和落幅；
 - 长对白口型必然稳定；
 - 表演类 Negative Prompt 稳定服从；
 - Kling 必然更外放、更适合身体或更适合所有对白。

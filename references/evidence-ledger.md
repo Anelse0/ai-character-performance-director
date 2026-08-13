@@ -5,6 +5,7 @@
 本规则由用户于 2026-08-11 明确要求：写入 skill 的模型能力、失败原因与稳定修复，必须有正确来源或经过用户明确生成验证。
 
 - `official`：模型厂商官方文档明确支持，可写成平台事实；保留适用版本和边界。
+- `user_approved`：用户明确批准的 Skill 工作流、输出契约或证据政策；可作为设计要求，不构成模型效果验证。
 - `user_verified`：用户报告了实际生成结果；只在相同模型、工作流、输入条件和约束范围内成立。
 - `experimental`：只有修复假设，尚无官方依据或用户成片验证；可以作为待验证输出，不能进入稳定规则。
 - `rejected`：用户实测无效或与官方资料冲突；不得再次作为默认建议。
@@ -21,8 +22,11 @@
 - `[USER-CRAFT-01]`：用户批准的演技提升引擎设计边界；
 - `[USER-CRAFT-02]`：用户批准的未指定风格解析顺序。
 - `[USER-INTERACTION-01]`：用户批准的交互分类、实体许可、物理可行性和动作识别度工作流。
+- `[CAM-ASC-01]` 至 `[CAM-ASC-04]`：人物/行动驱动、独立导演视点、功能性运镜、银幕方向与运动工具选择；
+- `[CAM-LOCAL-01]`：本地 Cinematique 只作术语参考；
+- `[USER-CAMERA-01]`：用户批准的 Camera Unit、环境模式与镜头执行过滤边界。
 
-这些来源支持表演推导与证据边界，不构成 Seedance 或 Kling 的能力保证。模型能力和稳定修复仍只按本文件下列平台证据与用户成片验证登记。
+上述表演与镜头方法的详细来源登记在 `references/acting-craft.md` 与 `references/camera-direction.md`。它们支持生成推导与证据边界，不构成 Seedance 或 Kling 的能力保证。模型能力和稳定修复仍只按本文件下列平台证据与用户成片验证登记。
 
 ## Kling 官方来源
 
@@ -80,6 +84,48 @@
 - 访问：2026-08-11。
 - 支持：手势应描述路径、表情、时机、身体朝向和接收对象；出现解剖或时序问题时，先简化场景、减少竞争动作，并在生成后检查动作清晰度、主体一致性和变形再迭代。
 
+### [K-CAM-01] Kling 3.0 文本运镜与单镜负荷
+
+- 状态：`official`
+- 来源：[Kling AI Camera Control: Master Push, Pull, Pan & Tilt](https://kling.ai/blog/kling-ai-camera-control-video-guide)。
+- 发布：2026-06-29；访问：2026-08-13。
+- 支持：Kling VIDEO 3.0/Omni 可通过正文描述 push、pull、pan、tilt、track、orbit 与 static；官方建议把镜头连接到主体和场景，写清方向，并让单镜优先一个主要 camera action。官方还将文本、参考图像、视频输入和 storyboard instructions 列为镜头规划入口，示例使用起幅/落幅、速度与稳定性质。
+- 边界：官方没有在该文档中给所有入口定义统一素材绑定字段或精确路径复现等级，并明确说明生成具有概率性、需要测试变化；清楚正文或普通视频输入不等于精确相机轨迹或关键帧保证。
+
+### [K-CAM-02] 独立 Camera Movement 控件
+
+- 状态：`official`
+- 来源：[Kling AI Camera Movement](https://kling.ai/quickstart/ai-camera-control-guide)。
+- 发布：2025-11-24；访问：2026-08-13。
+- 支持：官方 Camera Movement 功能列出 horizontal、vertical、zoom、pan、tilt、roll 六类基础运动和四种 Master Shots，并允许在界面调整位移幅度。
+- 边界：不同 UI 或合作方入口可能不暴露该控件；本 skill 只输出概念配置，不伪造统一 API 字段，也不把 UI 控件与冲突的正文运镜叠加。
+
+### [K-CAM-03] Start/End Frames 与主体连续性
+
+- 状态：`official`
+- 来源：[Kling VIDEO 3.0 Model User Guide](https://kling.ai/quickstart/klingai-video-3-model-user-guide)，Capabilities Upgrade 与 Image-to-Video/Element Reference。
+- 发布：2026-02-06；访问：2026-08-13。
+- 支持：Kling VIDEO 3.0 支持 Start & End Frames-to-Video；元素引用可帮助主体在 zoom、pan、tilt 或镜头变化时保持特征一致。
+- 边界：支持端点输入和主体引用不等于中间路径、速度、遮挡或几何补间精确；Motion Control 仍是人物动作来源，不是相机路径控制。
+
+### [K-MS-02] Kling 3.0 微型多镜与逐镜镜头设计
+
+- 状态：`official`
+- 来源：[Kling VIDEO 3.0 Multi-Shot: Create Structured Cinematic Sequences](https://kling.ai/blog/kling-video-3-multi-shot-guide)。
+- 发布：2026-07-28；访问：2026-08-13。
+- 支持：VIDEO 3.0 与 3.0 Omni 支持 3–15 秒 Multi-Shot/Custom Multi-Shot；官方当前说明自动与自定义模式最多 6 镜，自定义模式可逐镜指定时长、景别、视点、叙事内容和 camera movement，并建议每镜承担清楚任务。
+- 边界：逐镜控制是 shot-level 结构，不等于镜内运镜关键帧或人物微动作精确。
+
+## Seedance 官方来源
+
+### [S2-CAM-01] 多模态镜头参考与 camera planning
+
+- 状态：`official`
+- 来源：[Seedance 2.0 Official Launch](https://seed.bytedance.com/en/blog/seedance-2-0-official-launch) 与 [Seedance 2.0 Model Page](https://seed.bytedance.com/en/seedance2_0)。
+- 发布：2026-02-12；访问：2026-08-13。
+- 支持：Seedance 2.0 支持文本、图像、视频和音频输入，可参考素材中的构图、动作、camera movement、镜头语言与运动节奏，也支持 prompt-driven camera planning、文字分镜参考和 15 秒多镜音视频输出。
+- 边界：官方的 controllability 与 full control 表述不构成每次生成精确路径、秒点、复杂多轴运动或几何稳定保证；精确复现仍需参考素材与成片验证。
+
 ## 用户实测与要求
 
 ### [USER-K3-01] 原地约束失败
@@ -121,27 +167,34 @@
 
 ### [USER-POLICY-01] Skill 证据门禁
 
-- 状态：`user_verified`
+- 状态：`user_approved`
 - 用户要求日期：2026-08-11。
 - 要求：所有新增 Skill 内容必须有正确资讯来源，或经过用户明确验证后再写入；禁止以未经验证的推断充当稳定规则。
 
 ### [USER-CRAFT-01] 演技提升引擎设计
 
-- 状态：`user_verified`。
+- 状态：`user_approved`。
 - 用户批准日期：2026-08-12。
 - 要求：表演提升作为主流程；用具体对象、WANT、tactic、反馈与 ending 生成逐刻表演；使用自适应分析深度和风格契约；评价只作为生成前质量门及成片反馈闭环。
 - 边界：这是用户批准的 skill 工作流，不宣称为行业唯一表演体系，也不提高模型底层动作服从或物理稳定性。
 
 ### [USER-CRAFT-02] 未指定风格的解析顺序
 
-- 状态：`user_verified`。
+- 状态：`user_approved`。
 - 用户批准日期：2026-08-12。
 - 要求：优先采用用户明确风格、参考素材与既有上下文，其次使用可观察的场景线索；仍无依据时只作满足强度、景别与动作预算的最小风格假设并说明，不默认写实或克制。
 - 边界：这是 skill 决策规则，不构成模型能力、行业唯一方法或某种风格质量更高的结论。
 
 ### [USER-INTERACTION-01] 角色交互表演引擎设计
 
-- 状态：`user_verified`。
+- 状态：`user_approved`。
 - 用户批准日期：2026-08-12。
 - 要求：将交互类型、目标是否可见、实体所有权、接触与外部支撑、隐藏后的动作可读性和渲染模式分开推导；硬排除先做首帧门禁；单边接触暗示只用于短暂互惠动作并保持实验状态；持续接触和物体交换缺少必要对象时降级或阻断。
 - 边界：这是用户批准的生成工作流，不构成 Kling、Seedance 或其他模型能够稳定排除实体、正确完成接触或服从数量约束的能力保证。
+
+### [USER-CAMERA-01] 镜头导演与运镜引擎设计
+
+- 状态：`user_approved`。
+- 用户批准日期：2026-08-13。
+- 要求：新增 `environment` 模式；角色与环境镜头都主动判断静止或移动；用 Camera Unit 建立起幅、触发、一个主运镜、停止和落幅；候选策略按观看关系而非同义术语区分；支持单镜及 15 秒内微序列；模型执行来源与镜头意图分离。
+- 边界：这是用户批准的 skill 决策与验收流程，不构成模型能够稳定执行复杂路径、扩写首帧外空间或命中精确相机关键帧的能力保证。

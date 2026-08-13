@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'echo "Validation failed at line ${LINENO}: ${BASH_COMMAND}" >&2' ERR
 
 skill_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
@@ -12,6 +13,7 @@ required_files=(
   "references/acting-core.md"
   "references/actor-cut.md"
   "references/narrative-performance.md"
+  "references/camera-direction.md"
   "references/interaction-performance.md"
   "references/dialogue-listening.md"
   "references/climax-failures.md"
@@ -25,6 +27,7 @@ required_files=(
   "tests/acceptance-cases.md"
   "tests/fixtures/acting-craft-forward-tests-v1.1.0.md"
   "tests/fixtures/interaction-performance-forward-tests-v1.2.0.md"
+  "tests/fixtures/camera-direction-forward-tests-v1.3.0.md"
 )
 
 for path in "${required_files[@]}"; do
@@ -35,20 +38,23 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.2\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10200$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.2.0`；version code：`10200`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.3\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10300$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.3.0`；version code：`10300`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
+grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
 grep -q 'kling3-standard-stationary-reunion.verified.md' "${skill_root}/README.md"
 grep -q 'actor_cut' "${skill_root}/SKILL.md"
 grep -q 'narrative' "${skill_root}/SKILL.md"
+grep -q 'environment' "${skill_root}/SKILL.md"
 grep -q 'Seedance 2.0 Prompt' "${skill_root}/SKILL.md"
 grep -q 'Kling 3.0' "${skill_root}/SKILL.md"
 grep -q '不把 FACS' "${skill_root}/SKILL.md"
 grep -q 'references/acting-craft.md' "${skill_root}/SKILL.md"
 grep -q 'references/performance-review.md' "${skill_root}/SKILL.md"
 grep -q 'references/interaction-performance.md' "${skill_root}/SKILL.md"
+grep -q 'references/camera-direction.md' "${skill_root}/SKILL.md"
 grep -q 'analysis_depth: auto | light | standard | deep' "${skill_root}/SKILL.md"
 grep -q 'target_person:' "${skill_root}/SKILL.md"
 grep -q 'turning_trigger:' "${skill_root}/SKILL.md"
@@ -63,7 +69,16 @@ grep -q 'new_entity_policy: allow | forbid' "${skill_root}/SKILL.md"
 grep -q 'reflection_policy: preserve | forbid_new' "${skill_root}/SKILL.md"
 grep -q 'shadow_policy: preserve | forbid_new' "${skill_root}/SKILL.md"
 grep -q 'source_preflight: pass | block' "${skill_root}/SKILL.md"
-grep -q '^### 3\. 编译交互可见性与动作可行性$' "${skill_root}/SKILL.md"
+grep -q '^### 3\. 设计 Camera Unit$' "${skill_root}/SKILL.md"
+grep -q '^### 4\. 编译交互可见性与动作可行性$' "${skill_root}/SKILL.md"
+grep -q 'camera_intent:' "${skill_root}/SKILL.md"
+grep -q 'viewer_relation:' "${skill_root}/SKILL.md"
+grep -q 'movement_driver:' "${skill_root}/SKILL.md"
+grep -q 'camera_subject:' "${skill_root}/SKILL.md"
+grep -q 'spatial_transform: static | translate | rotate | optical | focus' "${skill_root}/SKILL.md"
+grep -q 'subject_coupling: follow | lead | parallel | counter | reveal | leave_behind | independent' "${skill_root}/SKILL.md"
+grep -q 'execution_source: prompt | ui_control | start_end_frames | video_reference | custom_multishot' "${skill_root}/SKILL.md"
+grep -q '`镜头设计`：用一至两行写' "${skill_root}/SKILL.md"
 grep -q '`交互处理`：仅在交互任务中输出' "${skill_root}/SKILL.md"
 grep -q 'source_preflight: block.*render_mode: incompatible' "${skill_root}/SKILL.md"
 grep -q '至少在内部考虑两个真正不同的 tactic' "${skill_root}/SKILL.md"
@@ -120,6 +135,61 @@ grep -q '连续因果 prose' "${skill_root}/adapters/seedance-2.md"
 grep -q '^## G\. 演技提升引擎$' "${skill_root}/tests/acceptance-cases.md"
 grep -q '不能宣称实际成片演技成立' "${skill_root}/tests/acceptance-cases.md"
 grep -q '不使用综合演技总分' "${skill_root}/tests/acceptance-cases.md"
+
+camera_reference="${skill_root}/references/camera-direction.md"
+grep -q '^## 目录$' "${camera_reference}"
+for evidence_id in CAM-ASC-01 CAM-ASC-02 CAM-ASC-03 CAM-ASC-04 CAM-LOCAL-01 USER-CAMERA-01; do
+  grep -q "\[${evidence_id}\]" "${camera_reference}" || {
+    echo "Missing camera-direction evidence boundary: ${evidence_id}" >&2
+    exit 1
+  }
+done
+grep -q 'spatial_transform: static | translate | rotate | optical | focus' "${camera_reference}"
+grep -q 'subject_coupling: follow | lead | parallel | counter | reveal | leave_behind | independent' "${camera_reference}"
+grep -q '一个镜头只有一个主要运动任务' "${camera_reference}"
+grep -q '^### Environment$' "${camera_reference}"
+grep -q '静止镜头是正式设计结果' "${camera_reference}"
+
+for camera_contract in camera_prompt_rendering camera_control_surface camera_reference_binding start_end_frame_boundary compound_camera_motion_boundary; do
+  grep -q "${camera_contract}:" "${skill_root}/adapters/adapter-contract.md" || {
+    echo "Missing camera adapter contract: ${camera_contract}" >&2
+    exit 1
+  }
+done
+grep -q '\[K-CAM-01\]' "${skill_root}/adapters/kling-3.md"
+grep -q '^### UI Camera Movement$' "${skill_root}/adapters/kling-3.md"
+grep -q '^### Start/End Frames$' "${skill_root}/adapters/kling-3.md"
+grep -q '^### 镜头参考$' "${skill_root}/adapters/kling-3.md"
+grep -q 'camera_execution: video_reference' "${skill_root}/adapters/kling-3.md"
+grep -q '最多 6 镜' "${skill_root}/adapters/kling-3.md"
+grep -q 'Motion Control 不是相机路径控制' "${skill_root}/adapters/kling-3.md"
+grep -q '\[S2-CAM-01\]' "${skill_root}/adapters/seedance-2.md"
+grep -q 'video_reference' "${skill_root}/adapters/seedance-2.md"
+grep -q '^## Environment 模式$' "${skill_root}/adapters/seedance-2.md"
+for evidence_id in K-CAM-01 K-CAM-02 K-CAM-03 K-MS-02 S2-CAM-01 USER-CAMERA-01; do
+  grep -q "\[${evidence_id}\]" "${skill_root}/references/evidence-ledger.md" || {
+    echo "Missing camera evidence ledger entry: ${evidence_id}" >&2
+    exit 1
+  }
+done
+grep -A3 '^### \[USER-CAMERA-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`'
+for evidence_id in USER-POLICY-01 USER-CRAFT-01 USER-CRAFT-02 USER-INTERACTION-01; do
+  grep -A3 "^### \[${evidence_id}\]" "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`' || {
+    echo "Approved workflow is misclassified as generated-result evidence: ${evidence_id}" >&2
+    exit 1
+  }
+done
+grep -q '^## C0\. 镜头导演与 Camera Unit$' "${skill_root}/references/quality-gates.md"
+grep -q '一至两行镜头设计，包含起幅、驱动、静止或主运镜、落幅和执行方式' "${skill_root}/references/quality-gates.md"
+grep -q '不要让新增镜头验收挤掉用户的核心表演或交互要求' "${skill_root}/SKILL.md"
+grep -q 'camera_design_mismatch' "${skill_root}/references/performance-review.md"
+grep -q '^## I\. 镜头导演与运镜引擎$' "${skill_root}/tests/acceptance-cases.md"
+for case_id in I1 I2 I3 I4 I5 I6 I7 I8 I9 I10 I11; do
+  grep -q "^### ${case_id}" "${skill_root}/tests/acceptance-cases.md" || {
+    echo "Missing camera acceptance case: ${case_id}" >&2
+    exit 1
+  }
+done
 
 interaction_reference="${skill_root}/references/interaction-performance.md"
 grep -q '^## 目录$' "${interaction_reference}"
@@ -241,6 +311,48 @@ if grep -Eq '对方(已经|终于).*(回应|靠近|接触)|完成(了)?(真实)?
   echo "Interaction forward-test Prompt invents hidden-target feedback or completion." >&2
   exit 1
 fi
+
+camera_fixture="${skill_root}/tests/fixtures/camera-direction-forward-tests-v1.3.0.md"
+grep -q '状态：`executed_self_forward_test`' "${camera_fixture}"
+grep -q '版本：`1.3.0`；version code：`10300`' "${camera_fixture}"
+grep -q '不是独立盲测、Kling/Seedance 生成结果或用户成片验证' "${camera_fixture}"
+for case_id in C1 C2 C3 C4 C5 C6 C7 C8 C9; do
+  grep -q "^## ${case_id}" "${camera_fixture}" || {
+    echo "Missing camera forward test: ${case_id}" >&2
+    exit 1
+  }
+done
+
+camera_prompt_start_count="$(grep -c '<!-- PROMPT_OUTPUT_START -->' "${camera_fixture}")"
+camera_prompt_end_count="$(grep -c '<!-- PROMPT_OUTPUT_END -->' "${camera_fixture}")"
+test "${camera_prompt_start_count}" -eq 9
+test "${camera_prompt_end_count}" -eq 9
+
+camera_prompt_outputs="$(awk '
+  /<!-- PROMPT_OUTPUT_START -->/ { in_prompt=1; next }
+  /<!-- PROMPT_OUTPUT_END -->/ { in_prompt=0; next }
+  in_prompt { print }
+' "${camera_fixture}")"
+if grep -Eq 'camera_intent:|viewer_relation:|movement_driver:|camera_subject:|camera_unit:|spatial_transform:|subject_coupling:|execution_source:|execution_status:' <<<"${camera_prompt_outputs}"; then
+  echo "Camera forward-test Prompt output leaks internal camera-analysis fields." >&2
+  exit 1
+fi
+if grep -Eiq 'ARRI|Panavision|Kodak|(^|[^0-9])8K([^0-9]|$)|masterpiece|sweeping cinematic aerial' <<<"${camera_prompt_outputs}"; then
+  echo "Camera forward-test Prompt uses equipment or empty blockbuster shorthand instead of a Camera Unit." >&2
+  exit 1
+fi
+for required_phrase in '环境镜头' '固定机位' '平行跟随' 'Custom Multi-Shot' '执行方式' '照片' 'screen direction'; do
+  grep -q "${required_phrase}" <<<"${camera_prompt_outputs}" || {
+    echo "Camera forward tests missing coverage: ${required_phrase}" >&2
+    exit 1
+  }
+done
+for required_case in '复杂人物动作' '双模型适配' '大片质感'; do
+  grep -q "${required_case}" "${camera_fixture}" || {
+    echo "Camera forward tests missing case: ${required_case}" >&2
+    exit 1
+  }
+done
 
 stationary_fixture="${skill_root}/tests/fixtures/kling3-standard-stationary-reunion.verified.md"
 test -f "${stationary_fixture}"

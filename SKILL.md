@@ -1,39 +1,50 @@
 ---
 name: ai-character-performance-director
-description: 将角色意图、关系、刺激、情绪、对白、交互对象、时长与镜头限制转换为有戏剧行动、可观察、可拍摄、非模板化的 AI 视频表演提示词，并可根据成片或 A/B 结果定位失效 Beat 后定向修正。支持演员 Cut、实际剧情表演、对镜或画外交互、实体可见性约束，默认同时适配 Seedance 2.0 和 Kling 3.0。凡涉及 AI 角色演技、微表演、听戏、台词表演、角色与用户互动、招手、击掌、握手、拥抱、物体交换、禁止出现对方或额外身体局部、情绪高潮、多人对手戏、成片演技评价或表演 Prompt，使用本 skill。
+description: 将角色意图、关系、刺激、情绪、对白、交互对象、环境信息、时长与镜头限制转换为有戏剧行动、功能性镜头设计、可观察、可拍摄且非模板化的 AI 视频提示词，并可根据成片或 A/B 结果定位失效 Beat 或 Camera Unit 后定向修正。支持演员 Cut、实际剧情表演、空镜、航拍、建立镜头、对镜或画外交互及实体可见性约束，默认适配 Seedance 2.0 和 Kling 3.0。凡涉及 AI 角色演技、微表演、听戏、台词表演、角色互动、情绪高潮、运镜设计、演员与镜头协同、环境空镜、航拍、短场景镜头语言、成片演技或镜头评价及对应 Prompt，使用本 skill；完整故事扩写、长场景 coverage 或全片分镜不使用本 skill。
 ---
 
 # AI Character Performance Director
 
-把“角色感到什么”先转换成“角色正对谁采取什么行动、希望改变什么”，再编译为镜头里有因果顺序的可观察变化。情绪是行动成功、受阻或改变策略后的场景结果，不是固定表情检索词；行为线索也不是心理诊断。
+把“角色感到什么”先转换成“角色正对谁采取什么行动、希望改变什么”，再决定观众从哪里、为何保持或移动、最后看见什么。情绪是行动成功、受阻或改变策略后的场景结果；镜头运动是信息、关系、空间或导演视点变化的结果，不是固定情绪特效。
 
 ## 工作边界
 
-本 skill 负责表演策略、模型 Prompt 渲染，以及用户提供成片后的定向反馈；不负责扩写完整故事、制作全片分镜或替用户决定与表演无关的美术风格。若用户已提供剧情，只补足表演所必需的信息。
+本 skill 负责表演策略、单镜或 15 秒内微序列的镜头设计、模型 Prompt 渲染，以及用户提供成片后的定向反馈；不负责扩写完整故事、制作长场景 coverage 或全片分镜，也不替用户决定无关的美术风格。若用户已提供剧情，只补足表演与镜头成立所必需的信息。
 
-支持两种模式：
+支持三种模式：
 
 - `actor_cut`：摄影机主要对着一个演员，表演本身是内容。可含无声反应、独白、短台词、画外刺激与听戏。
 - `narrative`：人物行动实际改变剧情、关系、信息、距离、物件归属或决定。可含多人互动、对白和多镜头。
+- `environment`：空镜、航拍、建立镜头或场景介绍；没有主要演员时，以空间、社会关系、规模、入口或伏笔承担镜头责任。
 
-用户明确写“演员 Cut / Actor Cut / 剧情表演”时服从指定；否则自动判断。模式判断不确定但两种结果会实质不同时，只问一个简短问题。
+用户明确写“演员 Cut / Actor Cut / 剧情表演 / 空镜 / 航拍 / 建立镜头”时服从指定；否则自动判断。模式判断不确定且结果会实质不同时，只问一个简短问题。
 
 ## 读取规则
 
-设计表演、生成 Prompt 或根据反馈输出修正版 Prompt 时读取：
+设计角色表演、生成角色 Prompt 或根据反馈输出角色修正版 Prompt 时读取：
 
 1. `references/acting-craft.md`
 2. `references/acting-core.md`
 3. 与模式对应的 `references/actor-cut.md` 或 `references/narrative-performance.md`
-4. `references/quality-gates.md`
-5. `references/evidence-ledger.md`
+4. `references/camera-direction.md`
+5. `references/quality-gates.md`
+6. `references/evidence-ledger.md`
+
+设计环境空镜、航拍、建立镜头或对应修正版 Prompt 时读取：
+
+1. `references/camera-direction.md`
+2. `references/quality-gates.md`
+3. `references/evidence-ledger.md`
 
 只评价成片或比较 Take、不生成修正版 Prompt 时读取：
 
 1. `references/performance-review.md`
 2. 与模式对应的 `references/actor-cut.md` 或 `references/narrative-performance.md`
-3. `references/quality-gates.md`
-4. `references/evidence-ledger.md`
+3. `references/camera-direction.md`
+4. `references/quality-gates.md`
+5. `references/evidence-ledger.md`
+
+只评价环境镜头时读取 `references/performance-review.md`、`references/camera-direction.md`、`references/quality-gates.md` 与 `references/evidence-ledger.md`。
 
 按需再读取：
 
@@ -53,7 +64,7 @@ description: 将角色意图、关系、刺激、情绪、对白、交互对象�
 用户可以只给自然语言。内部归一化为以下语义对象，但不要强迫用户填写表格：
 
 ```yaml
-mode: auto | actor_cut | narrative
+mode: auto | actor_cut | narrative | environment
 model: both | seedance2 | kling3_standard | kling3_omni | kling3_motion_control
 duration:
 characters:
@@ -92,6 +103,24 @@ display_policy: reveal | restrain | deny | redirect
 intensity: L1_leak | L2_breach | L3_dysregulation
 dialogue:
 shot_constraints:
+camera_intent:
+viewer_relation:
+movement_driver:
+camera_subject:
+camera_unit:
+  start_frame:
+  trigger:
+  spatial_transform: static | translate | rotate | optical | focus
+  trajectory:
+  subject_coupling: follow | lead | parallel | counter | reveal | leave_behind | independent
+  speed_profile:
+  stabilization_texture:
+  framing_correction:
+  stop_condition:
+  end_frame:
+screen_direction:
+execution_source: prompt | ui_control | start_end_frames | video_reference | custom_multishot
+execution_status: supported | experimental
 references:
 known_failures:
 ending:
@@ -112,7 +141,7 @@ spatial_lock: none | soft | hard
 root_motion: allowed | bounded | locked
 ```
 
-只在缺失信息会改变表演策略时追问，例如：不知道刺激是什么，且“听到坏消息”与“看见证据”会产生不同的镜头行为。其他缺失项做最小合理推断，并在结果中用一行说明。
+只在缺失信息会改变表演或镜头策略时追问，例如：不知道刺激是什么，且“听到坏消息”与“看见证据”会产生不同动作；或不知道环境镜头应揭示入口还是异常细节。其他缺失项做最小合理推断，并在结果中用一行说明。
 
 模型默认值：
 
@@ -120,6 +149,7 @@ root_motion: allowed | bounded | locked
 - 用户指定模型：只输出该模型版本。
 - Kling 未指定 Standard/Omni：单人或简单单镜用 Standard；只有角色/声音/多参考连续性确有需要时才用 Omni。
 - Standard/Omni 是模型选择，single shot/Custom Multi-Shot/Motion Control 是执行工作流；不要把两者混为一类。
+- 运镜复杂度不单独触发 Omni；先按 `references/camera-direction.md` 选择 Prompt、UI Camera Movement、Start/End Frames、视频参考或 Custom Multi-Shot。
 
 ## 工作流
 
@@ -129,11 +159,12 @@ root_motion: allowed | bounded | locked
 
 - 表演用于展示角色状态，剧情环境只是刺激或背景：`actor_cut`。
 - 表演产生可追踪的剧情后果：`narrative`。
+- 没有主要 performer，镜头用于建立空间、社会关系、规模、入口或伏笔：`environment`。
 - 单演员也可以是剧情表演；双人画面也可以由一个演员拥有 Actor Cut 式反应。
 
-### 2. 建立角色行动逻辑
+### 2. 建立角色行动逻辑或环境责任
 
-按 `references/acting-craft.md` 选择最低够用的分析深度，再确定：
+`actor_cut` 与 `narrative` 按 `references/acting-craft.md` 选择最低够用的分析深度，再确定：
 
 ```text
 style contract
@@ -150,7 +181,31 @@ style contract
 
 同一需求至少在内部考虑两个真正不同的 tactic。差异必须是人物如何影响对象，而不是更换表情或强度词。先通过用户硬要求，再依据关系、角色专属性、风格、镜头可读性和模型可执行性选择；不要调用固定情绪脸或行动动作词典。
 
-### 3. 编译交互可见性与动作可行性
+`environment` 不虚构 target、WANT 或演员情绪；按 `references/camera-direction.md` 确定空间中需要建立、揭示、连接或保留的唯一主要信息。
+
+### 3. 设计 Camera Unit
+
+所有模式都按 `references/camera-direction.md` 执行：
+
+```text
+lock requirements and source geometry
+→ define camera responsibility and viewer relation
+→ compare two genuinely different viewing strategies
+→ choose motivated static or movement
+→ start frame / trigger / one main move / stop / end frame
+→ coordinate subject, screen direction and model budget
+→ choose execution source
+```
+
+- 候选策略必须改变观众如何进入、跟随或离开场景，不能只替换同义运镜术语。
+- 静止镜头是正式设计结果；没有信息、关系、规模、注意力或导演视点变化时，不强行移动。
+- 每镜只有一个主要运动任务；辅助 pan/tilt 只用于维持构图，不承担第二个揭示。
+- 航拍、俯拍、POV、手持和 oner 只说明视点、质感或结构，不能替代路径、触发和落幅。
+- 演员动作复杂时压缩运镜；运镜承担主要揭示时压缩演员动作。
+- 图生视频若需要大量首帧外未知空间，标记几何风险并简化、改用参考或保持实验状态。
+- 内部 Camera Unit 不直接堆入 Prompt；只保留模型需要的起幅、主路径、人物关系、停止和落幅。
+
+### 4. 编译交互可见性与动作可行性
 
 当场景存在交互对象、接触、物体交换、镜头表面动作或实体硬排除时，按 `references/interaction-performance.md` 执行：
 
@@ -171,7 +226,7 @@ interaction class
 - 隐藏对象时，内部保留戏剧目标，但模型正文只写获准主体及其动作，不虚构对方已经回应、接触、靠近或完成交换。
 - 按起点、路径、表面朝向、接触/支撑、停点、收势和易混淆动作建立最小动作签名；不要建立固定动作词典。
 
-### 4. 评估 Kling 动作执行路径
+### 5. 评估 Kling 动作执行路径
 
 仅在输出 Kling 时执行。先判断用户需要的是“近似生成”还是“精确复现”，再按 `references/kling-motion-control.md` 选择：
 
@@ -182,9 +237,9 @@ interaction class
 
 若用户没有动作参考且 Motion Control 才能可靠满足要求，明确指出素材需求；不要把 Omni 当成精确动作驱动替代品。
 
-### 5. 组装可裁剪 Beat Graph
+### 6. 组装可裁剪 Beat Graph
 
-先按戏剧行动组织变化，再由 `references/acting-core.md` 映射为模型可见节点：
+角色模式先按戏剧行动组织变化，再由 `references/acting-core.md` 映射为模型可见节点：
 
 ```text
 existing expectation / baseline
@@ -206,7 +261,9 @@ existing expectation / baseline
 - 高潮来自行动风险、控制破口、策略改变或结果确认，不只来自动作与表情变大。
 - 回落来自反馈或重新控制，不机械恢复开场中性状态。
 
-### 6. 分配表演通道
+`environment` 跳过角色 Beat Graph，改用空间基线 → Camera Unit 触发 → 环境信息变化 → 落幅。背景群众、车辆、水面或树木只保留一个主要环境运动层。
+
+### 7. 分配表演与镜头预算
 
 每个 beat 首轮只安排一个主要表演意图：
 
@@ -216,23 +273,25 @@ existing expectation / baseline
 
 动作必须同时满足：可见、有限、有方向、能排序、由刺激触发、服务角色目标。优先使用 `消失、停止、释放、返回、撤回、开始后中止` 等状态变化，而不是身体部位清单。
 
-### 7. 控制时长
+镜头与演员共用执行预算：复杂人物动作配简单镜头关系；复杂空间揭示配单一主体动作。两者各自承担独立变化时，先删除、串行或拆镜，不能借“同时”强行合并。
+
+### 8. 控制时长
 
 - 4–6 秒：trigger → 一次可见 tactic → ending。
 - 7–10 秒：baseline → trigger → tactic → 可定位反馈或明确等待 → 一次调整或 ending。
 - 11–15 秒：可增加一次策略改道、失败恢复、短对白或听者反馈。
 
-若信息超出预算，删减次要 beat 或拆镜；不要承诺镜内精确到秒的微动作。
+环境镜头按同一预算只保留一个主要空间建立或揭示；15 秒微序列每镜必须增加不同信息。若信息超出预算，删减次要 beat 或拆镜；不要承诺镜内精确到秒的微动作或相机关键帧。
 
-### 8. 渲染模型版本
+### 9. 渲染模型版本
 
-- Seedance：连续因果 prose，使用相对时序，突出单一表演弧。
-- Kling：把 UI/API 配置与正文分开；Custom Multi-Shot 每镜一个戏剧任务并给逐镜时长。
+- Seedance：连续因果 prose，使用相对时序，保留 Camera Unit 的起幅、主运动和落幅；复杂路径优先使用视频参考。
+- Kling：把 UI/API 配置与正文分开；Prompt 与独立 Camera Movement 控件不得冲突；Custom Multi-Shot 每镜一个戏剧和视觉任务并给逐镜时长。
 - Kling Standard/Omni 的演员 Cut 情绪输出：正文使用带时间范围的分段框架。分段数量、边界与状态标题按本次表演动态生成；标题直接写 `【0–1.4s｜状态】`，不得在时间前添加“约”。正文同时声明时间范围仅作节奏参考，跨段动作必须连续，不得在边界停顿、重置或重新起势。Motion Control 不使用该框架驱动动作。
 
-模型适配只改变表达包装，不改变角色的核心行动逻辑。
+模型适配只改变表达包装与镜头执行来源，不改变角色行动、camera intent 或落幅责任。
 
-### 9. 质量检查与定向护栏
+### 10. 质量检查与定向护栏
 
 按 `references/quality-gates.md` 检查。护栏只针对当前已知或高概率失败，首轮保持少量、不冲突，并优先给正向替代：
 
@@ -248,7 +307,7 @@ existing expectation / baseline
 - 尚未获得官方依据或用户生成结果的修复，只能作为“待验证实验版本”输出，不能写入稳定规则或宣称已修复；
 - 证据状态与编号统一记录在 `references/evidence-ledger.md`。
 
-用户提供成片或多个 Take 时，先按 `references/performance-review.md` 区分需求偏差、模型伪影、表演策略和呈现干扰，定位最先失效的 Beat。只修正该节点及其下游，再返回正常表演设计与模型渲染流程；不以评价报告替代改进。
+用户提供成片或多个 Take 时，先按 `references/performance-review.md` 区分需求偏差、模型伪影、表演策略、镜头设计、镜头执行和呈现干扰，定位最先失效的 Beat 或 Camera Unit 节点。只修正该节点及其下游，再返回正常设计与模型渲染流程；不以评价报告替代改进。
 
 ## 默认输出
 
@@ -256,15 +315,16 @@ existing expectation / baseline
 
 1. `模式判断`：模式、必要假设、模型选择。
 2. `交互处理`：仅在交互任务中输出 `直接动作 | 单边接触暗示（待验证） | 邀请并等待 | 需求冲突`。
-3. `导演逻辑`：一句话说明刺激、目标、策略和结束状态。
-4. `Seedance 2.0 Prompt`：仅在需要 Seedance 时输出。
-5. `Kling 3.0 配置` 与 `Kling 3.0 Prompt`：仅在需要 Kling 时输出；多镜逐镜列出。Motion Control 还要输出动作来源、Facial Element 参考计划和不与动作参考冲突的补充 Prompt；素材不足时同时给出缺口与可运行的 Standard 降级方案。
-6. `成功标准`：三条可从成片直接观察的标准；交互任务分别检查实体许可、动作可读性和结束状态。
-7. `不确定性 / 调试`：只写最主要的一条，不承诺硬控制。
+3. `导演逻辑`：角色模式用一句话说明刺激、目标、策略和结束状态；环境模式说明要建立或揭示的空间信息。
+4. `镜头设计`：用一至两行写 `起幅 → 运镜驱动 → 主运镜 → 落幅；执行方式`。选择静止时同样说明观看责任。
+5. `Seedance 2.0 Prompt`：仅在需要 Seedance 时输出。
+6. `Kling 3.0 配置` 与 `Kling 3.0 Prompt`：仅在需要 Kling 时输出；多镜逐镜列出。Motion Control 还要输出动作来源、Facial Element 参考计划和不与动作参考冲突的补充 Prompt；素材不足时同时给出缺口与可运行的 Standard 降级方案。
+7. `成功标准`：三条可从成片直接观察的标准。角色模式分别覆盖核心行动/ending、Camera Unit 的执行或落幅、主体—镜头协调；环境模式覆盖镜头意图、路径/落幅和空间几何；交互任务优先覆盖实体许可、动作可读性及结束状态/镜头协调。不要让新增镜头验收挤掉用户的核心表演或交互要求。
+8. `不确定性 / 调试`：只写最主要的一条，不承诺硬控制。
 
 若交互任务触发 `source_preflight: block` 或 `render_mode: incompatible`，不要输出不可运行 Prompt；改为输出冲突、最低改动的素材/动作方案及继续生成所需条件。
 
-Prompt 本体应可直接复制；分析要短，不复述用户剧情。
+Prompt 本体应可直接复制；镜头设计必须已经写入正文，不要求用户自行拼接。分析要短，不复述用户剧情或暴露完整 Camera Unit。
 
 当输出 Kling Standard/Omni 演员 Cut 情绪 Prompt 时，分段框架属于 Prompt 本体，不额外输出一份连续 prose 版本。Motion Control 按专用输出契约执行。
 
@@ -277,9 +337,14 @@ Prompt 本体应可直接复制；分析要短，不复述用户剧情。
 - 不把 FACS、微表情、眨眼率或吞咽当成读心密码。
 - 不用 `cinematic / realistic / deeply emotional` 替代具体动作。
 - 不让所有角色同时表演；每个 beat 指定 reaction owner。
+- 不建立“情绪—运镜”词典，不因独白、哭泣、高潮或浪漫场景自动推近、环绕或升降。
+- 不用 `cinematic / sweeping / Hollywood blockbuster / 8K / masterpiece` 代替起幅、驱动、路径、停止和落幅。
+- 不复制本地 Cinematique 模板中的机型、镜头、胶片、色彩或导演标签，除非用户明确要求该视觉规格。
+- 不把航拍、手持、POV、俯拍或 oner 当作完整运镜设计。
+- 不让一个单镜同时承担多个独立运镜任务；辅助构图修正不能成为第二个揭示。
 - 不把“没有生成对方”直接判为交互动作成功，也不把一次动作可读判为实体排除稳定。
 - 不在对象不可见时虚构持续接触、承重、拉力、物体转移或对方已经回应。
 - 不堆叠眉、眼、嘴、呼吸、肩、手、重心和镜头运动。
 - 不默认峰值从第一帧开始，也不强迫所有场景先延迟再反应。
-- 不承诺精确镜内秒点、完美口型、负面提示词服从或模型绝对优劣。
+- 不承诺精确镜内秒点、相机关键帧、复杂路径、完美口型、负面提示词服从或模型绝对优劣。
 - 不输出与目标平台不一致的伪官方字段。

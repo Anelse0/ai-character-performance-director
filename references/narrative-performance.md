@@ -76,6 +76,8 @@ beat_1:
 
 每镜只承担一个戏剧任务：建立刺激、处理、说话、听者反应、行动后果或余波。不要把接收、崩溃和恢复塞进同一个两秒 reaction shot。
 
+镜头设计同时按 `references/camera-direction.md` 判断：跟随人物、预领目的地、揭示信息、转移注意、留在后果或保持静止。每镜只有一个主要 Camera Unit；换角度但没有新增动作、信息、关系或节奏责任，不构成有效 coverage。
+
 ## 连续性账本
 
 多镜头时记录并传递：
@@ -87,9 +89,13 @@ held_objects:
 gaze_target:
 body_residue:
 unfinished_action_or_line:
+camera_end_frame:
+screen_direction:
 ```
 
 上一镜的 end state 是下一镜的 baseline。若上一镜下颌仍紧、手已离开钥匙或一句话未说完，下一镜不得无意重置。
+
+上一镜的落幅、人物出画方向与 camera subject 也要传入下一镜。动作场面优先保持清楚的 screen direction；跟随、counter move 或 leave-behind 必须说明镜头为何继续跟随、反向运动或留在后果上。
 
 ## 道具与空间
 

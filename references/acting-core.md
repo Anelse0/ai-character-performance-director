@@ -28,6 +28,23 @@
 7. `display_policy / intensity`：公开、克制、否认或改道，以及可承载的破口程度。
 8. `ending`：行动后留下的关系、任务或身体状态。
 
+还要从 `references/camera-direction.md` 接收压缩后的镜头契约：
+
+```yaml
+camera_intent:
+camera_unit:
+  start_frame:
+  trigger:
+  spatial_transform:
+  trajectory:
+  subject_coupling:
+  stop_condition:
+  end_frame:
+execution_source:
+```
+
+Camera Unit 只决定表演如何被观看，不得反向改写已选 WANT、tactic 或 ending。镜头需要改变表演策略时，返回 `references/acting-craft.md` 重新选择，不能在本层暗改。
+
 若场景包含对镜/画外交互、身体接触、物体交换、镜头表面动作或实体硬排除，还要从 `references/interaction-performance.md` 接收：
 
 ```yaml
@@ -100,7 +117,7 @@ action_signature:
 
 ## 5. 表演意图与通道预算
 
-每个 beat 只安排一个主要表演意图。简单表演选择一个主通道，必要时加入一个可见辅助通道：
+每个 beat 只安排一个主要表演意图。简单表演选择一个主通道，必要时加入一个可见辅助通道；镜头运动与演员动作共用执行预算：
 
 | 构图 | 优先可读通道 | 谨慎使用 |
 |---|---|---|
@@ -119,6 +136,8 @@ action_signature:
 4. 必须精确同步或完整保留时，交给对应模型的动作控制工作流。
 
 Motion Unit 的机械拆解、速度、方向、接触与收势规则见 `references/kling-motion-control.md`。
+
+若 Camera Unit 已承担明显推进、拉远、环绕、升降或揭示，人物只保留一个主要行动及必要机械联动。若人物包含复杂走位、转身、跑跳、接触或多步交互，镜头改为固定关系或简单跟随。两者无法压缩时拆镜或要求参考素材，不用“同时”强行合并。
 
 交互动作还要按 `references/interaction-performance.md` 保留决定动作身份的最小签名。动作名称本身不能替代路径或表面朝向；若隐藏对象后识别度低、物理依赖无法消除，改为邀请等待或返回需求冲突，不能通过增加动作零件硬凑完成感。
 
