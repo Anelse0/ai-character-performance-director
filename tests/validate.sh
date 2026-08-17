@@ -43,9 +43,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.7\.1$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10701$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.7.1`；version code：`10701`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.8\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10800$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.8.0`；version code：`10800`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -415,21 +415,21 @@ grep -q '外显动作库' "${skill_root}/references/longform-performance-pattern
 grep -A2 '^### \[S25-FORMULA-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`experimental`'
 grep -q '第三方待核实' "${skill_root}/references/evidence-ledger.md"
 
-# --- 1.6.0: shape selector, variants, second example, verified-prompt archive ---
+# --- 1.6.0/1.8.0: shape selector (single-progression + two-party), verified-prompt archive ---
 lp="${skill_root}/references/longform-performance-pattern.md"
 grep -q '形态选择器' "${lp}"
 grep -q '单一情绪递进' "${lp}"
-grep -q '多情绪转折' "${lp}"
 grep -q '双人情绪交流' "${lp}"
 grep -q '### 6\.1 L3/L4 形态变体' "${lp}"
-grep -q '## 8\. 多情绪转折样例' "${lp}"
 grep -q 'seedance25-30s-farewell-monologue.verified.md' "${lp}"
+# 1.8.0: 多情绪转折类型已移除，仅保留设计边界说明
+grep -q '设计边界' "${lp}"
+test "$(grep -c '^## 8\. 多情绪转折样例' "${lp}")" -eq 0
 # 单一情绪递进原型内容不得丢失
 grep -q '## 6\. 可填空模板' "${lp}"
 grep -q '{{角色参考图A}}' "${lp}"
-# 委托而非复制：形态选择器指向已有引擎
+# 委托而非复制：双人形态指向已有引擎
 grep -q 'references/narrative-performance.md' "${lp}"
-grep -q 'references/climax-failures.md' "${lp}"
 # 已验证 prompt 存档
 fixture="${skill_root}/tests/fixtures/seedance25-30s-farewell-monologue.verified.md"
 grep -q '状态：`user_verified`' "${fixture}"
@@ -450,7 +450,6 @@ for evidence_id in S20-FMT-01 USER-SD20-01; do
   }
 done
 grep -A2 '^### \[USER-SD20-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_verified`'
-grep -q '回落必须单列一个 Shot' "${skill_root}/references/longform-performance-pattern.md"
 grep -q '长篇情绪表演适配' "${skill_root}/adapters/seedance-2.md"
 grep -q '长篇情绪独白适配' "${skill_root}/adapters/kling-3.md"
 grep -q '越肩前景是高风险' "${skill_root}/adapters/kling-3.md"
