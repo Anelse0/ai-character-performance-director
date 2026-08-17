@@ -43,9 +43,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.8\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10800$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.8.0`；version code：`10800`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.8\.1$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10801$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.8.1`；version code：`10801`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -443,6 +443,16 @@ grep -q '单个 Shot 内的写法' "${skill_root}/adapters/seedance-2.md"
 grep -q '所有类型' "${skill_root}/adapters/seedance-2.md"
 grep -q '一律用结构化分镜格式' "${skill_root}/SKILL.md"
 grep -q '不限类型' "${skill_root}/SKILL.md"
+
+# --- 1.8.1: prompt self-sufficiency + mandatory scene/visible-signal ---
+grep -q '每条 Prompt 必须独立自足' "${skill_root}/SKILL.md"
+grep -q '图生视频也不省略' "${skill_root}/SKILL.md"
+grep -q '\[USER-PROMPT-01\]' "${skill_root}/references/evidence-ledger.md"
+grep -A2 '^### \[USER-PROMPT-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`'
+grep -q '## H\. Prompt 自足性与必写项' "${skill_root}/references/quality-gates.md"
+grep -q '每条 Prompt 独立自足' "${skill_root}/adapters/seedance-2.md"
+# 1.8.0 清理残留：seedance-2 适配器不应再有多情绪转折内容
+test "$(grep -c '情绪转折(多情绪)' "${skill_root}/adapters/seedance-2.md")" -eq 0
 for evidence_id in S20-FMT-01 USER-SD20-01; do
   grep -q "\[${evidence_id}\]" "${skill_root}/references/evidence-ledger.md" || {
     echo "Missing Seedance 2.0 format evidence: ${evidence_id}" >&2
