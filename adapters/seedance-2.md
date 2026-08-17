@@ -37,23 +37,39 @@ shot and identity/reference responsibility
 
 完整环绕、复合升降横移、dolly zoom、精确长镜头或镜头与复杂人物动作同步变化时，优先要求视频参考或简化；没有参考时标记 `experimental`，不把长文本称为精确控制。
 
-## 单镜渲染
+## 情绪表演:结构化分镜(默认格式)
 
-- 默认使用 `one continuous [duration] [shot size]`。
+**情绪表演一律用结构化分镜格式,不用连续 prose。** 依据官方 `[S20-FMT-01]`:Seedance 2.0 推荐**分镜(numbered shots)+ 分时段描述**,顶部先声明镜数/时长/画幅,再按 `0–3s / 3–6s / 6–10s / 10–15s` 之类**时间段**(不是精确卡秒)分镜;precise 卡秒不稳定。这与用户已验证格式一致(见 `references/longform-performance-pattern.md` §6 与 `tests/fixtures/seedance25-30s-farewell-monologue.verified.md`)。
+
+正文结构(= 验证格式):
+
+```text
+[身份契约:唯一主体 + 参考图绑定 + 正向一致性清单]
+[场景总纲:镜数 + 时长 + 情绪强度 + 时空 + 氛围 + 光 + 镜头关系 + 一个主运镜;焦点/画外对象声明]
+[单一情感事实(或带一次转折的主线)+ 情绪叠层]
+
+## Shot 01 (0–[t1]s) — [状态名]
+[该段:一个外显生理动作 → 可选一句对白 → 说完的反应]
+
+## Shot 02 ([t1]–[t2]s) — [状态名]
+……
+
+## Performance Direction
+[重述身份、光、镜头、情感事实,作为贯穿约束]
+```
+
+- **情绪转折(多情绪)必须每一拍一个 Shot**,尤其把**回落/压回单列一个 Shot 并写具体降温动作**(移视→慢呼气→肩落→眼神变冷→礼貌性收尾),否则转折在连续 prose 里会被揉平、读作假(教训见 `[USER-SD20-01]`)。
+- 时间段仅作节奏参考,跨段动作连续,不在边界重起势。
+- ≤10s 装完整转折偏紧;回落不稳时优先拉长到 12–15s,而不是加更多泪。
+
+## 单镜渲染(仅限极简单一动作、非情绪片段)
+
+仅当片段是单一、非情绪、可一句话说清的动作时,才可用连续 prose;**任何情绪表演走上一节的结构化分镜**。
+
 - 以 `when / at first / after a beat / only then / end with` 建立相对顺序。
 - 一个镜头只解决一个主要表演问题。
 - 微表演优先使用稳定中近景或特写。
-- 每次主动判断镜头；静止也要服务观看责任。使用运动时只保留一个主 Camera Unit，并让它服务策略、关系、信息、规模或导演视点变化。
-
-正文形态示意：
-
-```text
-One continuous [duration] [framing]. [Character and stable starting state].
-When [specific trigger], [orientation or processing]. After a beat, [primary change]
-and [optional visible support]. [Direct action or control/redirect]. Only then,
-[short dialogue or threshold if needed]. End with [residue or intentional threshold cut].
-[Two or three targeted positive guardrails].
-```
+- 每次主动判断镜头；静止也要服务观看责任。使用运动时只保留一个主 Camera Unit。
 
 这不是填空模板。句子数量、节点与顺序必须按场景裁剪；不需要的 control、dialogue 或 release 应删除。
 

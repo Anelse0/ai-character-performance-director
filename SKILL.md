@@ -292,6 +292,8 @@ Prompt 本体应可直接复制；镜头设计必须已经写入正文，不要�
 
 内容超出目标模型单次生成上限时，逐条输出 `video1 / video2 …` 的可运行 Prompt 及各自时长，每条重复身份契约、声明与上一条结束状态的承接；默认不删内容，只有用户明确要单条成片时才压缩。
 
+**情绪表演的 Prompt 一律用结构化分镜格式**（身份契约 → 场景总纲 → `Shot 01–N` 分段 beat → Performance Direction 重述，即 `references/longform-performance-pattern.md` §6 的验证格式），**不用连续 prose**；Seedance 顶部先声明镜数/时长/画幅（官方 `[S20-FMT-01]`），Kling 演员 Cut 情绪用 `【0–t｜状态】` 时间分段。连续 prose 仅限极简单一动作的非情绪片段。
+
 当输出 Kling Standard/Omni 演员 Cut 情绪 Prompt 时，分段框架属于 Prompt 本体，不额外输出一份连续 prose 版本。Motion Control 按专用输出契约执行。
 
 若用户只要求成片评价，按 `references/performance-review.md` 输出简短的结论、问题归属、可观察证据和一项最高收益修正；没有成片时只能评价设计风险。用户要求修正版 Prompt 时，再使用上述默认输出契约。
