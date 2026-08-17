@@ -1,6 +1,6 @@
 ---
 name: ai-character-performance-director
-description: 将角色意图、关系、刺激、情绪、对白、交互对象、环境信息、时长与镜头限制转换为有戏剧行动、功能性镜头设计、可观察、可拍摄且非模板化的 AI 视频提示词，并可根据成片或 A/B 结果定位失效 Beat 或 Camera Unit 后定向修正。支持演员 Cut、实际剧情表演、空镜、航拍、建立镜头、对镜或画外交互及实体可见性约束，默认适配 Seedance 2.0 和 Kling 3.0。凡涉及 AI 角色演技、微表演、听戏、台词表演、角色互动、情绪高潮、运镜设计、演员与镜头协同、环境空镜、航拍、短场景镜头语言、成片演技或镜头评价及对应 Prompt，使用本 skill；完整故事扩写、长场景 coverage 或全片分镜不使用本 skill。
+description: 把角色意图、关系、刺激、情绪、对白、环境与镜头限制，转换为有戏剧行动、功能性运镜、可观察且非模板化的 AI 视频提示词（默认 Seedance 2.0 与 Kling 3.0），并可根据成片定位失效 Beat 或 Camera Unit 做定向修正。凡涉及 AI 角色演技、微表演、听戏、台词、角色互动、情绪高潮、运镜设计、演员与镜头协同、空镜航拍建立镜头、短场景镜头语言，或成片演技/镜头评价及对应 Prompt 时使用；完整故事扩写、长场景 coverage 或全片分镜不使用。
 ---
 
 # AI Character Performance Director
@@ -11,6 +11,10 @@ description: 将角色意图、关系、刺激、情绪、对白、交互对象�
 
 本 skill 负责表演策略、单镜或 15 秒内微序列的镜头设计、模型 Prompt 渲染，以及用户提供成片后的定向反馈；不负责扩写完整故事、制作长场景 coverage 或全片分镜，也不替用户决定无关的美术风格。若用户已提供剧情，只补足表演与镜头成立所必需的信息。
 
+**设计立场**：细粒度编排服务于 Prompt 自洽与失效可定位（成片出问题时能回到具体 Beat 或 Camera Unit 修正），不承诺成片逐项服从模型。设计立场与跨文件共享规则的权威表述见 `references/shared-principles.md`。
+
+**置信度**：已有真实成片验证集中在 Kling 3.0 Standard 单人 `actor_cut`；`environment`（空镜/航拍）与 `narrative` 多镜多人目前只有自测，无真实生成验证，按设计级（experimental）置信度输出，见 `references/evidence-ledger.md` 的“能力核实与验证覆盖”。
+
 支持三种模式：
 
 - `actor_cut`：摄影机主要对着一个演员，表演本身是内容。可含无声反应、独白、短台词、画外刺激与听戏。
@@ -20,6 +24,8 @@ description: 将角色意图、关系、刺激、情绪、对白、交互对象�
 用户明确写“演员 Cut / Actor Cut / 剧情表演 / 空镜 / 航拍 / 建立镜头”时服从指定；否则自动判断。模式判断不确定且结果会实质不同时，只问一个简短问题。
 
 ## 读取规则
+
+所有生成与评价任务都先内化 `references/shared-principles.md`（跨文件权威规则与设计立场）。其余参考按下方“复杂度分档”和场景决定；快车道请求只读该档所列文件，不为“更完整”加载无关参考。
 
 设计角色表演、生成角色 Prompt 或根据反馈输出角色修正版 Prompt 时读取：
 
@@ -61,7 +67,7 @@ description: 将角色意图、关系、刺激、情绪、对白、交互对象�
 
 ## 输入策略
 
-用户可以只给自然语言。内部归一化为以下语义对象，但不要强迫用户填写表格：
+用户可以只给自然语言。内部归一化为语义对象，但不要强迫用户填写表格。以下是最常用的**核心字段**；交互、复杂运镜、Kling 动作控制、原地锁定等**扩展字段与完整清单见 `references/input-schema.md`**：
 
 ```yaml
 mode: auto | actor_cut | narrative | environment
@@ -73,73 +79,18 @@ analysis_depth: auto | light | standard | deep
 style_contract:
 given_circumstances:
 target_person:
-interaction_class: unilateral_signal | brief_reciprocal_contact | sustained_contact | object_transfer | offscreen_audio | offscreen_physical | spatial_invitation | lens_interaction
-target_presence: visible | offscreen_audio | implied
-target_visualization: allowed | forbidden
-reciprocity: none | brief | sustained
-contact_requirement: none | implied | required
-external_support: none | person | object
-legibility_without_target: high | medium | low
-render_mode: direct_action | implied_contact_experimental | invite_and_wait | visible_interaction | incompatible
-entity_contract:
-  allowed_owners:
-  forbidden_owners:
-  allowed_existing_props:
-  new_entity_policy: allow | forbid
-  visible_body_scope:
-  reflection_policy: preserve | forbid_new
-  shadow_policy: preserve | forbid_new
-  source_preflight: pass | block
-scene_state:
-trigger:
 want:
-stakes:
-obstacle:
 tactic:
-expected_effect:
 turning_trigger:
-hide_or_conflict:
 display_policy: reveal | restrain | deny | redirect
 intensity: L1_leak | L2_breach | L3_dysregulation
 dialogue:
 shot_constraints:
 camera_intent:
-viewer_relation:
-movement_driver:
-camera_subject:
-camera_unit:
-  start_frame:
-  trigger:
-  spatial_transform: static | translate | rotate | optical | focus
-  trajectory:
-  subject_coupling: follow | lead | parallel | counter | reveal | leave_behind | independent
-  speed_profile:
-  stabilization_texture:
-  framing_correction:
-  stop_condition:
-  end_frame:
-screen_direction:
-execution_source: prompt | ui_control | start_end_frames | video_reference | custom_multishot
-execution_status: supported | experimental
-references:
-known_failures:
 ending:
-kling_workflow: auto | standard_single | custom_multi_shot | motion_control
-spatial_control: auto | prompt_only | motion_control
-motion_scope: localized | upper_body | full_body
-motion_precision: approximate | repeatable | exact
-motion_concurrency:
-head_turn:
-face_occlusion:
-identity_sensitivity:
-motion_reference: none | uploaded_video | motion_library
-facial_element:
-gaze_target:
-gaze_behavior: establish | naturally_adjust | reacquire
-expression_references:
-spatial_lock: none | soft | hard
-root_motion: allowed | bounded | locked
 ```
+
+按需从 `references/input-schema.md` 取用的扩展字段簇：交互与实体契约（`interaction_class / target_presence / target_visualization / render_mode / entity_contract / source_preflight` 等）、完整 Camera Unit（`viewer_relation / movement_driver / camera_subject / spatial_transform / subject_coupling / execution_source` 等）、Kling 动作与原地控制（`kling_workflow / motion_reference / gaze_behavior / root_motion` 等）。
 
 只在缺失信息会改变表演或镜头策略时追问，例如：不知道刺激是什么，且“听到坏消息”与“看见证据”会产生不同动作；或不知道环境镜头应揭示入口还是异常细节。其他缺失项做最小合理推断，并在结果中用一行说明。
 
@@ -152,6 +103,16 @@ root_motion: allowed | bounded | locked
 - 运镜复杂度不单独触发 Omni；先按 `references/camera-direction.md` 选择 Prompt、UI Camera Movement、Start/End Frames、视频参考或 Custom Multi-Shot。
 
 ## 工作流
+
+### 0. 复杂度分档（先做）
+
+先判断请求属于哪一档，避免对简单请求启动全套机器。分档只改流程负荷，**不改证据门禁与默认输出契约**。
+
+- **快车道 fast**：单人单镜、≤8 秒、`actor_cut` 或单一空镜；无交互对象、无对白、无复杂/接触动作、无实体硬排除。只读 `shared-principles`、`acting-craft`（取 `light` 深度）、对应模式 ref、目标适配器、`quality-gates` 相关子节；跳过 interaction / dialogue / climax / motion-control。直接走 `target → WANT → tactic → 一次可见变化 → ending` ＋ 一个 Camera Unit。
+- **标准 standard**：7–15 秒、有可定位反馈或一次策略调整、单一交互或短对白。按完整读取规则，用 `analysis_depth` 控制深度。
+- **复杂 deep**：多人冲突、高潮阈值、物体交换或持续接触、实体硬排除、Motion Control、多镜序列。加载全部相关 reference，逐项过质量门。
+
+判断不确定且结果会实质不同时，按低一档处理，必要时只问一个简短问题。
 
 ### 1. 判断模式
 
@@ -329,6 +290,48 @@ Prompt 本体应可直接复制；镜头设计必须已经写入正文，不要�
 当输出 Kling Standard/Omni 演员 Cut 情绪 Prompt 时，分段框架属于 Prompt 本体，不额外输出一份连续 prose 版本。Motion Control 按专用输出契约执行。
 
 若用户只要求成片评价，按 `references/performance-review.md` 输出简短的结论、问题归属、可观察证据和一项最高收益修正；没有成片时只能评价设计风险。用户要求修正版 Prompt 时，再使用上述默认输出契约。
+
+## 示例（黄金样例）
+
+一个快车道 actor_cut 的完整输入→输出,用于锚定产出形态。其他任务按各自默认输出契约调整。
+
+**输入**：`Kling 3.0 Standard，8 秒，演员 Cut，单人面对镜头，无台词。久别重逢，情绪充分但不过度；人物始终原地，只允许面部、肩部和双臂动作。`
+
+**输出**：
+
+> **模式判断**：`actor_cut`（单人对镜、表演即内容）；模型 Kling 3.0 Standard 单镜；复杂度=快车道。假设中近景、稳定单镜。
+>
+> **导演逻辑**：角色对镜头前想象中的重逢对象，想让对方确认“我还在、可以靠近”；策略是压住冲击、用放开的肩臂发出邀请；结束停在敞开等待，不虚构对方回应。
+>
+> **镜头设计**：中近景固定机位建立对视 → 无运镜驱动（保护微表演）→ 全程 static、人物—镜头距离不变 → 落幅停在肩臂打开、目光留在镜头；执行方式：prompt（单镜）。
+>
+> **Kling 3.0 配置**：模型 Standard 3.0；模式 single shot；总时长 8s；`root_motion: locked`（内部需求标签，非官方字段）。
+>
+> **Kling 3.0 Prompt**：
+>
+> ```text
+> 8 秒稳定单镜中近景，无台词。人物自始至终站定，双脚持续承重，人物与镜头的距离保持不变。时间范围仅作节奏参考，动作可自然提前或延后；所有变化连续衔接，不在分段边界停顿、重置或重新起势。
+>
+> 【0–1.3s｜静立辨认】
+> 人物正面对镜，目光已落在镜头上，肩背安静，呼吸平稳。
+>
+> 【1.3–2.8s｜认出的冲击】
+> 目光一次收紧，下颌微收，嘴角先抿后松；肩线一次轻抬又落下，情绪浮起但压住。
+>
+> 【2.8–5.7s｜放开邀请】
+> 笑意漫开，眼里泛起水光但不落；双臂沿身体横向向左右缓缓打开到略宽于肩，掌心朝向镜头，肩胸随之舒展。
+>
+> 【5.7–8s｜敞开等待】
+> 动作停在双臂打开、身体前敞；目光继续留在镜头上，一次轻微点头；姿态保持不收回。
+>
+> 单人；画面只有该角色；不迈步、不前倾、不靠近或远离镜头、不做全身返回；双手完成一次横向打开即停。
+> ```
+>
+> **成功标准**：①读得出“辨认—压住—放开邀请—敞开等待”的递进，结尾停在敞开而非恢复中性；②全程固定中近景、人物与镜头距离不变、无推拉环绕；③人物原地无走近/退回，面部与肩臂动作互不打架。
+>
+> **不确定性/调试**：Standard 纯文本不保证零根位移；若出现走近/退回，先强化“站定、双脚承重、距离不变”并删除任何前后向措辞，而非叠加否定词。
+
+该样例与已验证回归 `tests/fixtures/kling3-standard-stationary-reunion.verified.md` 同条件；改变模型、工作流、景别或主要动作方向时需重新验收。
 
 ## 禁止事项
 
