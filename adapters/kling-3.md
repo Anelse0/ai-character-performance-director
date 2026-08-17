@@ -264,6 +264,17 @@ root_motion: locked | bounded | allowed
 3. 若用户接受近似生成，另给删减、串行后的 Standard Prompt；
 4. 不把 Standard 降级版描述成能够精确复现动作。
 
+## 长篇情绪独白适配
+
+单主体持续情绪独白/告别按 `references/longform-performance-pattern.md` 的五层骨架渲染。Kling 3.0 相对 Seedance 2.5 有三处必须调整:
+
+- **时长**:单次生成 ≤15s。区分两层:单次生成**内**用 **Custom Multi-Shot**(依 `[K-MS-02]` 最多 6 镜、逐镜时长求和 ≤15s)承载 beat;整条弧**超出 15s** 时,**默认切成多条可运行 prompt(`video1`/`video2`…)**,每条 ≤15s,按情绪阶段边界切分,`video2` 用末帧或 element reference 承接 `video1`,每条重复身份契约与单一情感事实(见 `references/longform-performance-pattern.md` §4.1)。**不以删内容为默认**;只有用户明确要单条成片时才压到一镜。
+- **L4 分段**:压到一镜时,Actor Cut 情绪使用本适配器的**强制时间分段框架**`【0–t｜状态】`;拆多镜时用逐镜时长,不套用该框架驱动动作。
+- **L1 身份跨镜**:用 **Omni + element reference** 维持跨镜身份,配 character/voice binding;不靠正文反复描述锁定。
+- **越肩前景是高风险(关键)**:Kling 已实测在对镜/交互场景增生第二张脸或多余的手(`[USER-K3-03]`/`[USER-K3-04]`)。越肩保留"对方模糊肩部"正是外部实体来源;按 `references/interaction-performance.md` 做**正向单主体契约 + 首帧门禁**,把实体排除标为待成片验证;若风险不可控,**改为正面对镜、去掉越肩前景**,用镜头缓慢前推替代"对方视角"。
+- **L5 重述**:精简重述,单镜短时长过度重述会稀释;多镜时把持续约束分摊进每镜 baseline。
+- 情绪外化、慢速连续小动作、否定式克制、结尾悬而未决——保留;避免爆发式大动作与复杂走位。
+
 ## 对白与听戏
 
 - 固定角色名，speaker、line、delivery 相邻。

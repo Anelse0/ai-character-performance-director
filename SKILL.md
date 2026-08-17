@@ -58,8 +58,10 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 - 有对白、画外音、听戏或多人话轮：`references/dialogue-listening.md`
 - 有崩溃、强忍泪、惊恐、压抑愤怒、表白、分手、背叛等阈值场面：`references/climax-failures.md`
 - 输出 Kling 且包含复杂动作、转头中的情绪变化、精确动作复现或 Motion Control：`references/kling-motion-control.md`
-- 输出 Seedance：`adapters/seedance-2.md`
+- 输出 Seedance 2.0：`adapters/seedance-2.md`
+- 输出 Seedance 2.5（30s one-take）：`adapters/seedance-2.5.md`
 - 输出 Kling：`adapters/kling-3.md`
+- 单主体、≥15 秒的持续情绪独白/告别/隐忍等长篇表演：`references/longform-performance-pattern.md`（含 Seedance 2.5/2.0、Kling 3.0 的分模型渲染）
 - 扩展新模型适配器：`adapters/adapter-contract.md`
 - 根据成片或多个 Take 输出修正版 Prompt：先读取 `references/performance-review.md` 完成诊断，再进入完整表演设计流程。
 
@@ -71,7 +73,7 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 
 ```yaml
 mode: auto | actor_cut | narrative | environment
-model: both | seedance2 | kling3_standard | kling3_omni | kling3_motion_control
+model: both | seedance2 | seedance2_5 | kling3_standard | kling3_omni | kling3_motion_control
 duration:
 characters:
 relationship:
@@ -98,6 +100,7 @@ ending:
 
 - 用户未指定模型：同时输出 Seedance 2.0 与 Kling 3.0 两版。
 - 用户指定模型：只输出该模型版本。
+- 用户指定 Seedance 2.5：按 `adapters/seedance-2.5.md` 输出 30s one-take；编号绑定参考素材，叙事用 Shot N、卡点用秒级 timestamp。单主体长篇情绪表演走 `references/longform-performance-pattern.md`。
 - Kling 未指定 Standard/Omni：单人或简单单镜用 Standard；只有角色/声音/多参考连续性确有需要时才用 Omni。
 - Standard/Omni 是模型选择，single shot/Custom Multi-Shot/Motion Control 是执行工作流；不要把两者混为一类。
 - 运镜复杂度不单独触发 Omni；先按 `references/camera-direction.md` 选择 Prompt、UI Camera Movement、Start/End Frames、视频参考或 Custom Multi-Shot。
@@ -242,7 +245,7 @@ existing expectation / baseline
 - 7–10 秒：baseline → trigger → tactic → 可定位反馈或明确等待 → 一次调整或 ending。
 - 11–15 秒：可增加一次策略改道、失败恢复、短对白或听者反馈。
 
-环境镜头按同一预算只保留一个主要空间建立或揭示；15 秒微序列每镜必须增加不同信息。若信息超出预算，删减次要 beat 或拆镜；不要承诺镜内精确到秒的微动作或相机关键帧。
+环境镜头按同一预算只保留一个主要空间建立或揭示；15 秒微序列每镜必须增加不同信息。若单条 clip 内 beat 超出预算，先删减或串行次要 beat；但当整条内容超出目标模型**单次生成的时长上限**时，默认按情绪阶段切成多条可运行 prompt（`video1`/`video2`…）覆盖完整内容，**不以删内容为默认**（见 `references/longform-performance-pattern.md` §4.1）。不要承诺镜内精确到秒的微动作或相机关键帧。
 
 ### 9. 渲染模型版本
 
@@ -286,6 +289,8 @@ existing expectation / baseline
 若交互任务触发 `source_preflight: block` 或 `render_mode: incompatible`，不要输出不可运行 Prompt；改为输出冲突、最低改动的素材/动作方案及继续生成所需条件。
 
 Prompt 本体应可直接复制；镜头设计必须已经写入正文，不要求用户自行拼接。分析要短，不复述用户剧情或暴露完整 Camera Unit。
+
+内容超出目标模型单次生成上限时，逐条输出 `video1 / video2 …` 的可运行 Prompt 及各自时长，每条重复身份契约、声明与上一条结束状态的承接；默认不删内容，只有用户明确要单条成片时才压缩。
 
 当输出 Kling Standard/Omni 演员 Cut 情绪 Prompt 时，分段框架属于 Prompt 本体，不额外输出一份连续 prose 版本。Motion Control 按专用输出契约执行。
 

@@ -11,7 +11,7 @@
 
 ```yaml
 mode: auto | actor_cut | narrative | environment
-model: both | seedance2 | kling3_standard | kling3_omni | kling3_motion_control
+model: both | seedance2 | seedance2_5 | kling3_standard | kling3_omni | kling3_motion_control
 duration:
 characters:
 relationship:

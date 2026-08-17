@@ -2,9 +2,9 @@
 
 将角色意图、关系、刺激、情绪、对白、环境信息、时长与镜头限制，转换为有戏剧行动、功能性镜头设计、可观察、可拍摄且非模板化的 AI 视频 Prompt。
 
-支持 Seedance 2.0 与 Kling 3.0，覆盖演员 Cut、剧情表演、环境空镜、航拍、建立镜头、对白听戏、角色交互、复杂动作及失败修复。
+支持 Seedance 2.0、Seedance 2.5（30s one-take）与 Kling 3.0，覆盖演员 Cut、剧情表演、环境空镜、航拍、建立镜头、对白听戏、角色交互、复杂动作、单主体长篇情绪独白范式及失败修复。
 
-当前版本：`1.4.0`；version code：`10400`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
+当前版本：`1.5.0`；version code：`10500`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
 
 ## 核心原则
 
@@ -149,8 +149,8 @@ Kling 3.0 Standard，8 秒，演员 Cut，单人面对镜头，无台词。
 SKILL.md                 核心路由、复杂度分档、输入输出契约、工作流与黄金样例
 VERSION                  version name 与递增 version code
 agents/openai.yaml       Skill UI 元数据
-adapters/                Seedance、Kling 与适配器契约
-references/              共享原则、完整输入 schema、演技提升、镜头导演、交互表演、表演内核、成片反馈、模式规则、证据与质量门禁
+adapters/                Seedance 2.0/2.5、Kling 与适配器契约
+references/              共享原则、完整输入 schema、演技提升、镜头导演、交互表演、长篇情绪表演范式、表演内核、成片反馈、模式规则、证据与质量门禁
 tests/                   验收案例、回归样例与静态校验
 ```
 

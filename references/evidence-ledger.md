@@ -2,8 +2,8 @@
 
 ## 能力核实与验证覆盖
 
-- **official 能力最后核实：2026-08-13。** 本文件登记的 Kling / Seedance 官方入口、字段与能力可能已更新;输出前以当前官方入口为准,发现变化时按下方晋升规则重新登记,不沿用过期能力做承诺。
-- **真实成片验证覆盖有限。** 目前 `user_verified` 成片证据集中在 Kling 3.0 Standard、单人 `actor_cut`(见 `[USER-K3-01]`~`[USER-K3-04]`)。
+- **official 能力最后核实：2026-08-13(Seedance 2.5 于 2026-08-17 补充核实)。** 本文件登记的 Kling / Seedance 官方入口、字段与能力可能已更新;输出前以当前官方入口为准,发现变化时按下方晋升规则重新登记,不沿用过期能力做承诺。
+- **真实成片验证覆盖有限。** 目前 `user_verified` 成片证据:Kling 3.0 Standard 单人 `actor_cut`(见 `[USER-K3-01]`~`[USER-K3-04]`),以及 Seedance 2.5 30s 单人告别独白(`[USER-SD25-01]`)。
 - **`environment`(空镜/航拍)与 `narrative` 多镜多人**目前只有自测 forward-test,**无真实生成验证**,应按设计级(`experimental`)置信度对待,不宣称成片质量已验证。跨文件设计立场见 `references/shared-principles.md`。
 
 ## 晋升规则
@@ -132,6 +132,21 @@
 - 支持：Seedance 2.0 支持文本、图像、视频和音频输入，可参考素材中的构图、动作、camera movement、镜头语言与运动节奏，也支持 prompt-driven camera planning、文字分镜参考和 15 秒多镜音视频输出。
 - 边界：官方的 controllability 与 full control 表述不构成每次生成精确路径、秒点、复杂多轴运动或几何稳定保证；精确复现仍需参考素材与成片验证。
 
+### [S25-CAP-01] Seedance 2.5 单次 one-take、参考理解与时间戳编辑
+
+- 状态：`official`(仅限下列官方确认项)
+- 来源：[Seedance 2.5 Model Page](https://seed.bytedance.com/en/seedance2_5)(2026-08-17 一手核实)；[Introducing Seedance 2.5](https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5)(限定官方域名搜索摘要佐证,博客正文未逐字抓取)。
+- 官方确认:单次生成最长 30 秒,可扩展(模型页原文 “extend twice”;博客称多轮 extension)以延长;reference-to-video 能理解参考视频的意图、构图与镜头语言,超出单纯 motion transfer;单次最多 30 图 + 10 视频 + 10 音频参考素材;支持专业运镜与 performance blocking;支持对音视频的时间戳级编辑控制。
+- **第三方待核实(不作官方保证)**:原生 1080p / 4K 分辨率、prompt 对秒级 timestamp 的稳定响应、“给素材编号并绑定角色”的具体写法——均来自第三方指南,官方页未确认(4K 的官方表述指向另一模型的图像,不是 2.5 视频);以实测为准。
+- 不支持:one-take 不构成 30 秒内身份零漂移、口型完美同步、负面词稳定服从或精确相机关键帧保证。
+
+### [S25-FORMULA-01] Seedance 2.5 四段 prompt 结构(第三方归纳)
+
+- 状态：`experimental`(第三方指南归纳自官方发布示例,官方示例正文未一手核实)
+- 来源：第三方指南 [Seedance 2.5 Prompt Guide](https://suno.bi/en/blog/seedance-2-5-prompt-guide) 对官方发布示例的归纳;核实：2026-08-17。
+- 支持:四段结构——编号素材引用 → 一句话总纲(主体+地点+事件+风格+运镜)→ 按 timestamp 或 Shot N 的具体情节 → 收尾持续约束;配合情绪外化、缓慢连续小动作、正向措辞。与 `[USER-SD25-01]` 一致,该样本已验证有效。
+- 边界:不是一手官方文档;作为写作约定使用,换场景仍需成片验证,不作模型保证。
+
 ## 用户实测与要求
 
 ### [USER-K3-01] 原地约束失败
@@ -170,6 +185,15 @@
 - 用户结果：成片没有出现外部人物或他人的手，主要失败是动作；动作手横扫身体并经过额头，随后掌心向下前伸，无法读成击掌。
 - 允许结论：该 Take 的实体排除成立而动作识别度失败；两项必须分开验收。
 - 禁止扩写：不能据此声称删除交互对象语义稳定解决实体增生，也不能把单次动作误读归因于某一个词。
+
+### [USER-SD25-01] Seedance 2.5 长篇告别独白范式通过
+
+- 状态：`user_verified`
+- 用户确认日期：2026-08-17。
+- 条件：Seedance 2.5、30 秒单镜 one-take、图片参考(`{{Mixed 1}}`=身份、`{{Mixed 2}}`=服装);夜晚室内、冷光、越肩对方视角保留模糊肩部、焦点锁定女主脸;单一情感事实(仍爱着 / 已决定离开 / 正逼自己说出口)+ 情绪叠层;4 镜递进(中近→极近)、每镜对白夹在外显生理动作之间、结尾停在情绪悬而未决;结尾以「表演指导」块重述身份/光/镜头/情感事实。
+- 用户结果：经用户验证,非常满意。
+- 允许结论：该五层骨架(见 `references/longform-performance-pattern.md`)在上述条件下可作为已验证的 Seedance 2.5 长篇情绪表演范式。
+- 禁止扩写：仅限该模型、时长、图参考与内容类型;不外推为 Seedance 2.0 / Kling 3.0 或任意情绪场景的通用保证,换模型/时长/镜头需重新验收。
 
 ### [USER-POLICY-01] Skill 证据门禁
 

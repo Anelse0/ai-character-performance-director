@@ -11,6 +11,7 @@ required_files=(
   "agents/openai.yaml"
   "references/shared-principles.md"
   "references/input-schema.md"
+  "references/longform-performance-pattern.md"
   "references/acting-craft.md"
   "references/acting-core.md"
   "references/actor-cut.md"
@@ -25,6 +26,7 @@ required_files=(
   "references/evidence-ledger.md"
   "adapters/adapter-contract.md"
   "adapters/seedance-2.md"
+  "adapters/seedance-2.5.md"
   "adapters/kling-3.md"
   "tests/acceptance-cases.md"
   "tests/fixtures/acting-craft-forward-tests-v1.1.0.md"
@@ -40,9 +42,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.4\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10400$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.4.0`；version code：`10400`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.5\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10500$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.5.0`；version code：`10500`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -392,5 +394,34 @@ grep -q '纯否定护栏尽可能改写为正向状态变化' "${skill_root}/ref
 grep -q '逐项服从' "${skill_root}/references/shared-principles.md"
 grep -q 'official 能力最后核实：2026-08-13' "${skill_root}/references/evidence-ledger.md"
 grep -q '无真实生成验证' "${skill_root}/references/evidence-ledger.md"
+
+# --- 1.5.0: Seedance 2.5 adapter + long-form emotional-performance pattern ---
+grep -q 'model: both | seedance2 | seedance2_5 | kling3_standard | kling3_omni | kling3_motion_control' "${skill_root}/references/input-schema.md"
+grep -q 'seedance2_5' "${skill_root}/SKILL.md"
+grep -q 'adapters/seedance-2.5.md' "${skill_root}/SKILL.md"
+grep -q 'references/longform-performance-pattern.md' "${skill_root}/SKILL.md"
+grep -q 'one-take' "${skill_root}/adapters/seedance-2.5.md"
+grep -q '四段 prompt 结构' "${skill_root}/adapters/seedance-2.5.md"
+grep -q '五层骨架' "${skill_root}/references/longform-performance-pattern.md"
+grep -q '就是用户原 prompt 里的「表演指导」块' "${skill_root}/references/longform-performance-pattern.md"
+grep -q '分模型渲染矩阵' "${skill_root}/references/longform-performance-pattern.md"
+grep -q '多片输出,不砍内容' "${skill_root}/references/longform-performance-pattern.md"
+grep -q 'video1 / video2' "${skill_root}/SKILL.md"
+grep -q '## 6\. 可填空模板' "${skill_root}/references/longform-performance-pattern.md"
+grep -q '{{角色参考图A}}' "${skill_root}/references/longform-performance-pattern.md"
+grep -q '## 7\. 生产步骤' "${skill_root}/references/longform-performance-pattern.md"
+grep -q '外显动作库' "${skill_root}/references/longform-performance-pattern.md"
+grep -A2 '^### \[S25-FORMULA-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`experimental`'
+grep -q '第三方待核实' "${skill_root}/references/evidence-ledger.md"
+grep -q '长篇情绪表演适配' "${skill_root}/adapters/seedance-2.md"
+grep -q '长篇情绪独白适配' "${skill_root}/adapters/kling-3.md"
+grep -q '越肩前景是高风险' "${skill_root}/adapters/kling-3.md"
+for evidence_id in S25-CAP-01 S25-FORMULA-01 USER-SD25-01; do
+  grep -q "\[${evidence_id}\]" "${skill_root}/references/evidence-ledger.md" || {
+    echo "Missing Seedance 2.5 evidence entry: ${evidence_id}" >&2
+    exit 1
+  }
+done
+grep -A2 '^### \[USER-SD25-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_verified`'
 
 echo "Skill structure and required contracts are valid."

@@ -82,6 +82,17 @@ Seedance 与 Kling 共用 `references/interaction-performance.md` 的交互分�
 - 每镜只有一个 Camera Unit；换角度但没有新增动作、信息、关系或节奏责任的镜头应删除。
 - 15 秒微序列中的 camera end frame、screen direction 与主体出画方向要传入下一镜。
 
+## 长篇情绪表演适配
+
+单主体持续情绪独白/告别按 `references/longform-performance-pattern.md` 的五层骨架渲染。Seedance 2.0 与 2.5 的关键差异在于**它不是 30 秒 one-take**,故做降级适配:
+
+- **时长**:一次生成约 15 秒上限。30 秒情绪弧**默认切成多条可运行 prompt(`video1`/`video2`…)**,每条 ≤15s,按情绪阶段边界切分,`video2` 用续写/末帧承接 `video1` 的结束状态,每条都重复身份契约与单一情感事实(见 `references/longform-performance-pattern.md` §4.1)。**不以删内容为默认**;只有用户明确要单条成片时才压缩到 ~15s。单条 clip 内部仍可用 `First shot... Then cut to... End on...` 分段。
+- **L4 分段**:只用 `Shot N` 或相对时序(`when / after a beat / only then`);依据 `[S2-CAM-01]` 边界,不写秒级精确时间点。
+- **L1 身份**:用参考素材职责绑定(身份/服装)+ 正文正向声明一致性;不发明 `@Image1` 语法。
+- **L5 重述**:压到一镜时完整重述;拆多镜时把持续约束分摊进每镜起点。
+- **越肩隐藏对象**:按 `references/interaction-performance.md`,连续 prose 只写获准主体,不虚构对方回应或接触。
+- 情绪外化、慢速连续小动作、结尾停在悬而未决——三模型通用,全部保留。
+
 ## Environment 模式
 
 环境空镜不虚构角色行动逻辑。连续 prose 按 `空间基线 → Camera Unit 触发 → 一个主路径 → 信息或规模变化 → 落幅` 组织：
