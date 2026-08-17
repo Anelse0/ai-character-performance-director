@@ -43,9 +43,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.7\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10700$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.7.0`；version code：`10700`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.7\.1$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10701$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.7.1`；version code：`10701`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -438,10 +438,11 @@ grep -q 'one emotional truth' "${fixture}"
 grep -q '逐字存档：`tests/fixtures/seedance25-30s-farewell-monologue.verified.md`' "${skill_root}/references/evidence-ledger.md"
 
 # --- 1.7.0: emotional prompts use structured shots (verified format), not prose ---
-grep -q '情绪表演:结构化分镜' "${skill_root}/adapters/seedance-2.md"
-grep -q '不用连续 prose' "${skill_root}/adapters/seedance-2.md"
-grep -q '仅限极简单一动作、非情绪片段' "${skill_root}/adapters/seedance-2.md"
-grep -q '情绪表演的 Prompt 一律用结构化分镜格式' "${skill_root}/SKILL.md"
+grep -q '不用连续 prose 段落' "${skill_root}/adapters/seedance-2.md"
+grep -q '单个 Shot 内的写法' "${skill_root}/adapters/seedance-2.md"
+grep -q '所有类型' "${skill_root}/adapters/seedance-2.md"
+grep -q '一律用结构化分镜格式' "${skill_root}/SKILL.md"
+grep -q '不限类型' "${skill_root}/SKILL.md"
 for evidence_id in S20-FMT-01 USER-SD20-01; do
   grep -q "\[${evidence_id}\]" "${skill_root}/references/evidence-ledger.md" || {
     echo "Missing Seedance 2.0 format evidence: ${evidence_id}" >&2

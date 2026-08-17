@@ -4,7 +4,7 @@
 
 支持 Seedance 2.0、Seedance 2.5（30s one-take）与 Kling 3.0，覆盖演员 Cut、剧情表演、环境空镜、航拍、建立镜头、对白听戏、角色交互、复杂动作、单主体长篇情绪独白范式及失败修复。
 
-当前版本：`1.7.0`；version code：`10700`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
+当前版本：`1.7.1`；version code：`10701`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
 
 ## 核心原则
 

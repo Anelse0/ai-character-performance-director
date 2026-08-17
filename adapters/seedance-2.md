@@ -37,9 +37,9 @@ shot and identity/reference responsibility
 
 完整环绕、复合升降横移、dolly zoom、精确长镜头或镜头与复杂人物动作同步变化时，优先要求视频参考或简化；没有参考时标记 `experimental`，不把长文本称为精确控制。
 
-## 情绪表演:结构化分镜(默认格式)
+## 结构化分镜(默认格式,所有类型)
 
-**情绪表演一律用结构化分镜格式,不用连续 prose。** 依据官方 `[S20-FMT-01]`:Seedance 2.0 推荐**分镜(numbered shots)+ 分时段描述**,顶部先声明镜数/时长/画幅,再按 `0–3s / 3–6s / 6–10s / 10–15s` 之类**时间段**(不是精确卡秒)分镜;precise 卡秒不稳定。这与用户已验证格式一致(见 `references/longform-performance-pattern.md` §6 与 `tests/fixtures/seedance25-30s-farewell-monologue.verified.md`)。
+**所有 Prompt(情绪表演、剧情、空镜/环境等,不限类型)一律用结构化分镜格式,不用连续 prose 段落。** 依据官方 `[S20-FMT-01]`:Seedance 2.0 推荐**分镜(numbered shots)+ 分时段描述**,顶部先声明镜数/时长/画幅,再按 `0–3s / 3–6s / 6–10s / 10–15s` 之类**时间段**(不是精确卡秒)分镜;precise 卡秒不稳定。这与用户已验证格式一致(见 `references/longform-performance-pattern.md` §6 与 `tests/fixtures/seedance25-30s-farewell-monologue.verified.md`)。单一不可切分的动作写成单个 `Shot`(N=1),而非回退 prose。
 
 正文结构(= 验证格式):
 
@@ -62,16 +62,16 @@ shot and identity/reference responsibility
 - 时间段仅作节奏参考,跨段动作连续,不在边界重起势。
 - ≤10s 装完整转折偏紧;回落不稳时优先拉长到 12–15s,而不是加更多泪。
 
-## 单镜渲染(仅限极简单一动作、非情绪片段)
+## 单个 Shot 内的写法
 
-仅当片段是单一、非情绪、可一句话说清的动作时,才可用连续 prose;**任何情绪表演走上一节的结构化分镜**。
+即使只有一个镜头,也写成一个 `Shot 01 (0–[t]s)` 块,**不用裸 prose 段落**。相对时序词只在 Shot 内部组织 beat 时使用:
 
 - 以 `when / at first / after a beat / only then / end with` 建立相对顺序。
-- 一个镜头只解决一个主要表演问题。
+- 一个 Shot 只解决一个主要表演问题。
 - 微表演优先使用稳定中近景或特写。
 - 每次主动判断镜头；静止也要服务观看责任。使用运动时只保留一个主 Camera Unit。
 
-这不是填空模板。句子数量、节点与顺序必须按场景裁剪；不需要的 control、dialogue 或 release 应删除。
+这不是填空模板。beat 数量、节点与顺序必须按场景裁剪；不需要的 control、dialogue 或 release 应删除。
 
 ## 交互表演与实体契约
 
@@ -81,7 +81,7 @@ Seedance 与 Kling 共用 `references/interaction-performance.md` 的交互分�
 - `render_mode: direct_action` 时只写主角色一侧可独立成立的交流行动；
 - `render_mode: implied_contact_experimental` 时明确这是待验证的接触暗示；
 - `render_mode: invite_and_wait` 时把 ending 停在邀请与等待；
-- 隐藏对象时，连续 prose 只写获准主体的动作，不虚构对方回应、持续接触、承重或物体交换；
+- 隐藏对象时，正文只写获准主体的动作，不虚构对方回应、持续接触、承重或物体交换；
 - 短暂互惠动作只能称为待验证的接触暗示，并用相对时序写清动作路径、表面朝向、停点和收势；
 - 空间邀请以等待结束，不把画外对象写成已经进入画面；
 - 物体交换所需物体必须已在首帧出现或作为明确输入素材绑定；仅允许新增物体不满足交换前提；
@@ -106,12 +106,12 @@ Seedance 与 Kling 共用 `references/interaction-performance.md` 的交互分�
 - **L4 分段**:只用 `Shot N` 或相对时序(`when / after a beat / only then`);依据 `[S2-CAM-01]` 边界,不写秒级精确时间点。
 - **L1 身份**:用参考素材职责绑定(身份/服装)+ 正文正向声明一致性;不发明 `@Image1` 语法。
 - **L5 重述**:压到一镜时完整重述;拆多镜时把持续约束分摊进每镜起点。
-- **越肩隐藏对象**:按 `references/interaction-performance.md`,连续 prose 只写获准主体,不虚构对方回应或接触。
+- **越肩隐藏对象**:按 `references/interaction-performance.md`,正文只写获准主体,不虚构对方回应或接触。
 - 情绪外化、慢速连续小动作、结尾停在悬而未决——三模型通用,全部保留。
 
 ## Environment 模式
 
-环境空镜不虚构角色行动逻辑。连续 prose 按 `空间基线 → Camera Unit 触发 → 一个主路径 → 信息或规模变化 → 落幅` 组织：
+环境空镜不虚构角色行动逻辑。写成一个或多个 `Shot` 块(顶部声明镜数/时长/画幅),按 `空间基线 → Camera Unit 触发 → 一个主路径 → 信息或规模变化 → 落幅` 组织：
 
 - 航拍、俯拍、POV 或手持只定义视点/质感，另写实际路径；
 - 背景群众、车辆、水面或树木只保留一个主要环境运动层；

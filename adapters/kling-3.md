@@ -144,7 +144,15 @@ Kling Standard/Omni 的演员 Cut 情绪输出必须使用分段式 Prompt，不
 
 ## Standard 单镜
 
-正文按以下逻辑组织：
+结构化输出同样适用于 Kling，不限类型:单镜也写成一个带标签的块(演员 Cut 情绪用 `【0–t｜状态】` 时间分段;其余单镜用一个 `Shot 01` 块),不用扁平 prose 段落。下面的相对时序逻辑只在**单个块内部**组织 beat:
+
+```text
+[duration and framing, named character].
+When [trigger], [orientation/process]. Then [primary visible change].
+[one supporting cue]. [action/control/choice].
+[Name], [delivery after action]: "short line."
+End with [residue]. [bounded positive guardrails].
+```
 
 ```text
 [duration and framing, named character].
