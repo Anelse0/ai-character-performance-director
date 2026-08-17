@@ -61,7 +61,7 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 - 输出 Seedance 2.0：`adapters/seedance-2.md`
 - 输出 Seedance 2.5（30s one-take）：`adapters/seedance-2.5.md`
 - 输出 Kling：`adapters/kling-3.md`
-- 单主体、≥15 秒的持续情绪独白/告别/隐忍等长篇表演：`references/longform-performance-pattern.md`（含 Seedance 2.5/2.0、Kling 3.0 的分模型渲染）
+- 以情绪表演为内容的角色视频（单一情绪递进 / 多情绪转折 / 双人情绪交流）：`references/longform-performance-pattern.md`（含形态选择器与 Seedance 2.5/2.0、Kling 3.0 分模型渲染；仅单一递进为已验证，其余为设计级）
 - 扩展新模型适配器：`adapters/adapter-contract.md`
 - 根据成片或多个 Take 输出修正版 Prompt：先读取 `references/performance-review.md` 完成诊断，再进入完整表演设计流程。
 
