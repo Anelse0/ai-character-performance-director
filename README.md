@@ -4,7 +4,7 @@
 
 支持 Seedance 2.0、Seedance 2.5（30s one-take）与 Kling 3.0，覆盖演员 Cut、剧情表演、环境空镜、航拍、建立镜头、对白听戏、角色交互、复杂动作、单主体长篇情绪独白范式及失败修复。
 
-当前版本：`1.8.2`；version code：`10802`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
+当前版本：`1.9.0`；version code：`10900`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
 
 ## 核心原则
 
@@ -93,7 +93,8 @@ Skill 会自动判断模式；用户也可以明确指定“演员 Cut”“剧�
 
 ## 模型与工作流
 
-- Seedance 2.0：输出连续因果文本；复杂镜头路径优先使用视频参考。
+- Seedance 2.0：结构化分镜（`镜头 N`，不响应时间戳）；文戏/情绪递进优先用视频延长；复杂镜头路径优先使用视频参考。
+- Seedance 2.5：30s 直出；官方四段结构；响应整数秒时间戳；`镜头 N` 或时间戳分段均可。
 - Kling 3.0 Standard：适合单镜、可串行描述的表演。
 - Kling 3.0 Omni：用于角色、声音、多参考或跨镜连续性需求。
 - Kling Camera Movement / Start & End Frames：当前入口可用时与正文分离配置，不承诺中间路径精确。

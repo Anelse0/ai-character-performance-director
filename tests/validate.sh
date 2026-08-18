@@ -12,6 +12,7 @@ required_files=(
   "references/shared-principles.md"
   "references/input-schema.md"
   "references/longform-performance-pattern.md"
+  "references/performance-lexicon.md"
   "references/acting-craft.md"
   "references/acting-core.md"
   "references/actor-cut.md"
@@ -30,6 +31,7 @@ required_files=(
   "adapters/kling-3.md"
   "tests/acceptance-cases.md"
   "tests/fixtures/seedance25-30s-farewell-monologue.verified.md"
+  "tests/fixtures/seedance25-30s-argument-oscillating.verified.md"
   "tests/fixtures/acting-craft-forward-tests-v1.1.0.md"
   "tests/fixtures/interaction-performance-forward-tests-v1.2.0.md"
   "tests/fixtures/camera-direction-forward-tests-v1.3.0.md"
@@ -43,9 +45,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.8\.2$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10802$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.8.2`；version code：`10802`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.9\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10900$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.9.0`；version code：`10900`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -393,7 +395,7 @@ grep -q '设计立场' "${skill_root}/references/shared-principles.md"
 grep -q '镜头与演员共用同一执行预算' "${skill_root}/references/shared-principles.md"
 grep -q '纯否定护栏尽可能改写为正向状态变化' "${skill_root}/references/shared-principles.md"
 grep -q '逐项服从' "${skill_root}/references/shared-principles.md"
-grep -q 'official 能力最后核实：2026-08-13' "${skill_root}/references/evidence-ledger.md"
+grep -q 'official 能力最后核实：2026-08-18' "${skill_root}/references/evidence-ledger.md"
 grep -q '无真实生成验证' "${skill_root}/references/evidence-ledger.md"
 
 # --- 1.5.0: Seedance 2.5 adapter + long-form emotional-performance pattern ---
@@ -402,7 +404,7 @@ grep -q 'seedance2_5' "${skill_root}/SKILL.md"
 grep -q 'adapters/seedance-2.5.md' "${skill_root}/SKILL.md"
 grep -q 'references/longform-performance-pattern.md' "${skill_root}/SKILL.md"
 grep -q 'one-take' "${skill_root}/adapters/seedance-2.5.md"
-grep -q '四段 prompt 结构' "${skill_root}/adapters/seedance-2.5.md"
+grep -q '官方四段结构' "${skill_root}/adapters/seedance-2.5.md"
 grep -q '五层骨架' "${skill_root}/references/longform-performance-pattern.md"
 grep -q '就是用户原 prompt 里的「表演指导」块' "${skill_root}/references/longform-performance-pattern.md"
 grep -q '分模型渲染矩阵' "${skill_root}/references/longform-performance-pattern.md"
@@ -412,8 +414,8 @@ grep -q '## 6\. 可填空模板' "${skill_root}/references/longform-performance-
 grep -q '{{角色参考图A}}' "${skill_root}/references/longform-performance-pattern.md"
 grep -q '## 7\. 生产步骤' "${skill_root}/references/longform-performance-pattern.md"
 grep -q '外显动作库' "${skill_root}/references/longform-performance-pattern.md"
-grep -A2 '^### \[S25-FORMULA-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`experimental`'
-grep -q '第三方待核实' "${skill_root}/references/evidence-ledger.md"
+grep -A2 '^### \[S25-FORMULA-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`official`'
+grep -q '一手全文核实' "${skill_root}/references/evidence-ledger.md"
 
 # --- 1.6.0/1.8.0: shape selector (single-progression + two-party), verified-prompt archive ---
 lp="${skill_root}/references/longform-performance-pattern.md"
@@ -474,5 +476,34 @@ for evidence_id in S25-CAP-01 S25-FORMULA-01 USER-SD25-01; do
   }
 done
 grep -A2 '^### \[USER-SD25-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_verified`'
+
+# --- 1.9.0: first-hand official PDFs, oscillating-descent shape, sound layer, lexicon ---
+grep -q '不响应时间戳只响应镜头序号' "${skill_root}/references/evidence-ledger.md"
+grep -q '纠正' "${skill_root}/references/evidence-ledger.md"
+grep -q '视频延长 vs 分段拼接' "${skill_root}/references/evidence-ledger.md"
+grep -q '\[USER-SD25-02\]' "${skill_root}/references/evidence-ledger.md"
+grep -A2 '^### \[USER-SD25-02\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_verified`'
+grep -q '受激分层递进' "${lp}"
+grep -q '每次层轮转有可定位触发' "${lp}"
+grep -q '每镜 ≥6s' "${lp}"
+grep -q '### 2\.1 声音层' "${lp}"
+grep -q '### 3\.1 已验证技巧集' "${lp}"
+grep -q '泪水计量' "${lp}"
+grep -q '延长 video1' "${lp}"
+grep -q 'seedance25-30s-argument-oscillating.verified.md' "${lp}"
+grep -q '2.0 的 Shot 标题不写时间标注' "${skill_root}/adapters/seedance-2.md"
+grep -q '响应整数秒时间戳' "${skill_root}/adapters/seedance-2.5.md"
+grep -q 'sd25-pe' "${skill_root}/adapters/seedance-2.5.md"
+lex="${skill_root}/references/performance-lexicon.md"
+grep -q '写作词汇表,不是情绪查找表' "${lex}"
+grep -q '词条按通道索引,不按情绪索引' "${lex}"
+grep -q '署名细节稀缺制' "${lex}"
+grep -q '本场专属配额' "${lex}"
+grep -q '只收验证来源' "${lex}"
+grep -q 'references/performance-lexicon.md' "${skill_root}/SKILL.md"
+grep -q '合法设计' "${skill_root}/SKILL.md"
+argfix="${skill_root}/tests/fixtures/seedance25-30s-argument-oscillating.verified.md"
+grep -q '状态：`user_verified`' "${argfix}"
+grep -q 'The Heaviest Line' "${argfix}"
 
 echo "Skill structure and required contracts are valid."
