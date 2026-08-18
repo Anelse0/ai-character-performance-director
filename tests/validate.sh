@@ -45,9 +45,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.9\.1$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10901$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.9.1`；version code：`10901`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.9\.2$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10902$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.9.2`；version code：`10902`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -512,5 +512,28 @@ test "$(grep -c 'Seedance 使用连续因果 prose 和相对时序' "${skill_roo
 test "$(grep -c '^- Seedance：连续因果 prose' "${skill_root}/SKILL.md")" -eq 0
 grep -q '因果相对时序只在 Shot 块内部' "${skill_root}/SKILL.md"
 grep -q '因果相对时序只在单个 Shot 块内部使用' "${skill_root}/references/quality-gates.md"
+
+# --- 1.9.2: entry-sync assertions (first-read surfaces must track downstream state) ---
+# SKILL.md 置信度段落必须引用最新 user_verified 证据编号(防入口漂移)
+grep -q '\[USER-SD25-01\]' "${skill_root}/SKILL.md"
+grep -q '\[USER-SD25-02\]' "${skill_root}/SKILL.md"
+# 时长档位覆盖 30s 且含每镜下限
+grep -q '16–30 秒' "${skill_root}/SKILL.md"
+grep -q '每镜 ≥6 秒' "${skill_root}/SKILL.md"
+# 输出契约不硬编码单一 Seedance 版本
+test "$(grep -c '^5\. `Seedance 2\.0 Prompt`' "${skill_root}/SKILL.md")" -eq 0
+grep -q '标题标明实际版本' "${skill_root}/SKILL.md"
+# 默认模型 = Seedance 2.5 + Kling
+grep -q '同时输出 \*\*Seedance 2\.5\*\* 与 Kling 3\.0 两版' "${skill_root}/SKILL.md"
+# 运镜-情绪耦合澄清已传到 camera-direction(禁令所在地)
+grep -q '本场显式设计、写明动机的运镜—情绪耦合是合法的' "${skill_root}/references/camera-direction.md"
+# 质量门有声音检查项
+grep -q '声音层已写' "${skill_root}/references/quality-gates.md"
+# Kling 环境模式不回退无标签 prose
+grep -q '单个 Shot 块' "${skill_root}/adapters/kling-3.md"
+test "$(grep -c '写成连续单镜' "${skill_root}/adapters/kling-3.md")" -eq 0
+# README 不再残留单形态表述
+test "$(grep -c '单主体长篇情绪独白范式' "${skill_root}/README.md")" -eq 0
+grep -q '表演词条库' "${skill_root}/README.md"
 
 echo "Skill structure and required contracts are valid."

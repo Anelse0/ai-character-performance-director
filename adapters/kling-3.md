@@ -88,7 +88,7 @@ Kling 3.0 官方入口支持 Start & End Frames。使用时：
 
 ### Environment 模式
 
-环境空镜不套用演员 Cut 时间分段。正文按 `场景基线 → Camera Unit 触发 → 主路径 → 落幅 → 环境稳定护栏` 写成连续单镜，或使用 Custom Multi-Shot 拆成不同环境信息任务。航拍、俯拍或手持只说明视点/质感，仍必须写主路径和结束构图。
+环境空镜不套用演员 Cut 时间分段。正文写成**单个 Shot 块**（一个连续镜头，内部按 `场景基线 → Camera Unit 触发 → 主路径 → 落幅 → 环境稳定护栏` 组织），或使用 Custom Multi-Shot 拆成不同环境信息任务；不回退为无分镜标签的连续 prose 段落。航拍、俯拍或手持只说明视点/质感，仍必须写主路径和结束构图。
 
 ## Standard/Omni 演员 Cut 情绪 Prompt：强制输出框架
 

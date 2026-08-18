@@ -13,7 +13,7 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 
 **设计立场**：细粒度编排服务于 Prompt 自洽与失效可定位（成片出问题时能回到具体 Beat 或 Camera Unit 修正），不承诺成片逐项服从模型。设计立场与跨文件共享规则的权威表述见 `references/shared-principles.md`。
 
-**置信度**：已有真实成片验证集中在 Kling 3.0 Standard 单人 `actor_cut`；`environment`（空镜/航拍）与 `narrative` 多镜多人目前只有自测，无真实生成验证，按设计级（experimental）置信度输出，见 `references/evidence-ledger.md` 的“能力核实与验证覆盖”。
+**置信度**：已有真实成片验证——Kling 3.0 Standard 单人 `actor_cut`（`[USER-K3-01]`~`[USER-K3-04]`）、Seedance 2.5 30s 单人情绪表演两条（`[USER-SD25-01]` 单一情绪递进、`[USER-SD25-02]` 受激分层递进；均为夜内景/越肩/关系戏窄域）；`environment`（空镜/航拍）、`narrative` 多镜多人与双人情绪交流目前只有自测，无真实生成验证，按设计级（experimental）置信度输出。最新状态以 `references/evidence-ledger.md` 的“能力核实与验证覆盖”为准。
 
 支持三种模式：
 
@@ -99,9 +99,9 @@ ending:
 
 模型默认值：
 
-- 用户未指定模型：同时输出 Seedance 2.0 与 Kling 3.0 两版。
+- 用户未指定模型：同时输出 **Seedance 2.5** 与 Kling 3.0 两版（2.5 为当前默认 Seedance 版本；需要 2.0 时明确指定）。
 - 用户指定模型：只输出该模型版本。
-- 用户指定 Seedance 2.5：按 `adapters/seedance-2.5.md` 输出 30s one-take；编号绑定参考素材，叙事用 Shot N、卡点用秒级 timestamp。单主体长篇情绪表演走 `references/longform-performance-pattern.md`。
+- Seedance 2.5：按 `adapters/seedance-2.5.md` 输出（最长 30s 直出）；编号绑定参考素材，叙事用 `镜头 N`、卡点用整数秒时间戳。Seedance 2.0：按 `adapters/seedance-2.md`（`镜头 N` 无时间标注）。情绪表演走 `references/longform-performance-pattern.md`。
 - Kling 未指定 Standard/Omni：单人或简单单镜用 Standard；只有角色/声音/多参考连续性确有需要时才用 Omni。
 - Standard/Omni 是模型选择，single shot/Custom Multi-Shot/Motion Control 是执行工作流；不要把两者混为一类。
 - 运镜复杂度不单独触发 Omni；先按 `references/camera-direction.md` 选择 Prompt、UI Camera Movement、Start/End Frames、视频参考或 Custom Multi-Shot。
@@ -245,6 +245,7 @@ existing expectation / baseline
 - 4–6 秒：trigger → 一次可见 tactic → ending。
 - 7–10 秒：baseline → trigger → tactic → 可定位反馈或明确等待 → 一次调整或 ending。
 - 11–15 秒：可增加一次策略改道、失败恢复、短对白或听者反馈。
+- 16–30 秒（仅 Seedance 2.5 单次直出；其他模型走多片输出）：完整情绪弧，4–5 镜；**写实情绪表演中带对白的 beat 每镜 ≥6 秒**（`[USER-SD25-01]`/`[USER-SD25-02]` 验证节奏；10s 塞 3 镜的 ~3.3s/镜已实测失败）。形态与技巧按 `references/longform-performance-pattern.md`。
 
 环境镜头按同一预算只保留一个主要空间建立或揭示；15 秒微序列每镜必须增加不同信息。若单条 clip 内 beat 超出预算，先删减或串行次要 beat；但当整条内容超出目标模型**单次生成的时长上限**时，默认按情绪阶段切成多条可运行 prompt（`video1`/`video2`…）覆盖完整内容，**不以删内容为默认**（见 `references/longform-performance-pattern.md` §4.1）。不要承诺镜内精确到秒的微动作或相机关键帧。
 
@@ -282,7 +283,7 @@ existing expectation / baseline
 2. `交互处理`：仅在交互任务中输出 `直接动作 | 单边接触暗示（待验证） | 邀请并等待 | 需求冲突`。
 3. `导演逻辑`：角色模式用一句话说明刺激、目标、策略和结束状态；环境模式说明要建立或揭示的空间信息。
 4. `镜头设计`：用一至两行写 `起幅 → 运镜驱动 → 主运镜 → 落幅；执行方式`。选择静止时同样说明观看责任。
-5. `Seedance 2.0 Prompt`：仅在需要 Seedance 时输出。
+5. `Seedance Prompt`：仅在需要 Seedance 时输出，标题标明实际版本（`Seedance 2.5 Prompt` 或 `Seedance 2.0 Prompt`），按对应适配器渲染。
 6. `Kling 3.0 配置` 与 `Kling 3.0 Prompt`：仅在需要 Kling 时输出；多镜逐镜列出。Motion Control 还要输出动作来源、Facial Element 参考计划和不与动作参考冲突的补充 Prompt；素材不足时同时给出缺口与可运行的 Standard 降级方案。
 7. `成功标准`：三条可从成片直接观察的标准。角色模式分别覆盖核心行动/ending、Camera Unit 的执行或落幅、主体—镜头协调；环境模式覆盖镜头意图、路径/落幅和空间几何；交互任务优先覆盖实体许可、动作可读性及结束状态/镜头协调。不要让新增镜头验收挤掉用户的核心表演或交互要求。
 8. `不确定性 / 调试`：只写最主要的一条，不承诺硬控制。
