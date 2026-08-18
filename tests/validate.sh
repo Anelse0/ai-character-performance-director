@@ -45,9 +45,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.9\.2$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10902$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.9.2`；version code：`10902`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.9\.3$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10903$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.9.3`；version code：`10903`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"

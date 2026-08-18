@@ -113,7 +113,7 @@ ending:
 先判断请求属于哪一档，避免对简单请求启动全套机器。分档只改流程负荷，**不改证据门禁与默认输出契约**。
 
 - **快车道 fast**：单人单镜、≤8 秒、`actor_cut` 或单一空镜；无交互对象、无对白、无复杂/接触动作、无实体硬排除。只读 `shared-principles`、`acting-craft`（取 `light` 深度）、对应模式 ref、目标适配器、`quality-gates` 相关子节；跳过 interaction / dialogue / climax / motion-control。直接走 `target → WANT → tactic → 一次可见变化 → ending` ＋ 一个 Camera Unit。
-- **标准 standard**：7–15 秒、有可定位反馈或一次策略调整、单一交互或短对白。按完整读取规则，用 `analysis_depth` 控制深度。
+- **标准 standard**：7–30 秒（16–30 秒仅限 Seedance 2.5 直出，走 `longform` 情绪表演范式）、有可定位反馈或一次策略调整、单一交互或短对白。按完整读取规则，用 `analysis_depth` 控制深度。
 - **复杂 deep**：多人冲突、高潮阈值、物体交换或持续接触、实体硬排除、Motion Control、多镜序列。加载全部相关 reference，逐项过质量门。
 
 判断不确定且结果会实质不同时，按低一档处理，必要时只问一个简短问题。
