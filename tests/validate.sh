@@ -45,9 +45,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.10\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11000$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.10.0`；version code：`11000`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.10\.1$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11001$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.10.1`；version code：`11001`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -544,5 +544,13 @@ grep -q '分档执行' "${skill_root}/references/quality-gates.md"
 grep -q '本文件\*\*不进入生成路径\*\*' "${skill_root}/references/evidence-ledger.md"
 # 旧四流程读取规则必须保持删除状态(路由单一来源)
 test "$(grep -c '或根据反馈输出角色修正版 Prompt 时读取' "${skill_root}/SKILL.md")" -eq 0
+
+# --- 1.10.1: output label conventions (bare shot headings + 对白 label) ---
+grep -q '\[USER-FORMAT-01\]' "${skill_root}/SKILL.md"
+grep -q '不带说明后缀' "${skill_root}/SKILL.md"
+grep -q '对白：' "${skill_root}/SKILL.md"
+grep -A2 '^### \[USER-FORMAT-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`'
+test "$(grep -c '## 镜头 1 — \[状态名\]' "${skill_root}/adapters/seedance-2.md")" -eq 0
+grep -q '标题保持裸标题' "${skill_root}/references/longform-performance-pattern.md"
 
 echo "Skill structure and required contracts are valid."
