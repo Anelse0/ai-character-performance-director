@@ -45,9 +45,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.10\.2$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11002$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.10.2`；version code：`11002`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.10\.3$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11003$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.10.3`；version code：`11003`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -557,5 +557,12 @@ grep -q '标题保持裸标题' "${skill_root}/references/longform-performance-p
 grep -q '每句一行' "${skill_root}/SKILL.md"
 grep -q '标签独占一行' "${skill_root}/SKILL.md"
 grep -q '微格式' "${skill_root}/references/evidence-ledger.md"
+
+# --- 1.10.3: same-family consistency-first + interpretive-gloss style ([USER-STYLE-01]) ---
+grep -q '\[USER-STYLE-01\]' "${skill_root}/references/evidence-ledger.md"
+grep -A2 '^### \[USER-STYLE-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`'
+grep -q '仅限不同族场景' "${skill_root}/references/performance-lexicon.md"
+grep -q '一致性就是产品需求' "${skill_root}/references/performance-lexicon.md"
+grep -q '解释性情绪注解是已验证样式' "${skill_root}/references/acting-core.md"
 
 echo "Skill structure and required contracts are valid."
