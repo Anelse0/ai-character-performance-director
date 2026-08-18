@@ -350,7 +350,7 @@ Prompt 本体应可直接复制；镜头设计必须已经写入正文，不要�
 - 不用 `cinematic / realistic / deeply emotional` 替代具体动作。
 - 不让所有角色同时表演；每个 beat 指定 reaction owner。
 - 不建立“情绪—运镜”词典，不因独白、哭泣、高潮或浪漫场景自动推近、环绕或升降。禁的是**无场景理由的自动映射**；本场显式设计的、有动机的运镜—情绪耦合（如“情绪升高时缓慢靠近、沉默时静止”）是合法设计（`[USER-SD25-02]` 已验证），须写明动机。
-- 不用 `cinematic / sweeping / Hollywood blockbuster / 8K / masterpiece` 代替起幅、驱动、路径、停止和落幅。
+- 不用 `cinematic / sweeping / Hollywood blockbuster / 8K / masterpiece` 代替起幅、驱动、路径、停止和落幅。禁的是**装饰性堆砌**;功能性镜头规格(如 50mm/85mm 焦段表达压缩感与景别,官方范本 E3 亦用 35mm)是合法镜头语言,须与具体构图意图同写。
 - 不复制本地 Cinematique 模板中的机型、镜头、胶片、色彩或导演标签，除非用户明确要求该视觉规格。
 - 不把航拍、手持、POV、俯拍或 oner 当作完整运镜设计。
 - 不让一个单镜同时承担多个独立运镜任务；辅助构图修正不能成为第二个揭示。

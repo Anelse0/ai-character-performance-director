@@ -38,9 +38,9 @@ done < <(grep -oE '`(references|adapters|templates|tests)/[^`]+\.md`' "${skill_r
 
 # ---------- 2. 版本同步 ----------
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.14\.1$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11401$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.14.1`；version code：`11401`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.14\.2$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11402$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.14.2`；version code：`11402`' "${skill_root}/README.md"
 
 # ---------- 3. 入口同步(第一入口必须追踪下游状态) ----------
 sk="${skill_root}/SKILL.md"
@@ -133,5 +133,9 @@ grep -q '已被真实母版取代并删除' "${lp}"
 grep -q '分档执行' "${skill_root}/references/quality-gates.md"
 grep -q '^## H\. Prompt 自足性与必写项' "${skill_root}/references/quality-gates.md"
 grep -q '本场显式设计、写明动机的运镜—情绪耦合是合法的' "${skill_root}/references/camera-direction.md"
+grep -q '\[EXT-OBS-01\]' "${skill_root}/references/evidence-ledger.md"
+grep -A2 '^### \[EXT-OBS-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`experimental`'
+grep -q '人物小传块' "${skill_root}/references/longform-performance-pattern.md"
+grep -q '峰值即斩' "${skill_root}/references/longform-performance-pattern.md"
 
 echo "Skill structure and required contracts are valid."
