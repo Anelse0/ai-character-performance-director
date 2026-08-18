@@ -4,7 +4,7 @@
 
 支持 Seedance 2.0、Seedance 2.5（30s one-take）与 Kling 3.0，覆盖演员 Cut、剧情表演、环境空镜、航拍、建立镜头、对白听戏、角色交互、复杂动作、情绪表演范式（单一情绪递进 / 受激分层递进 / 双人交流）、表演词条库及失败修复。
 
-当前版本：`1.10.3`；version code：`11003`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
+当前版本：`1.11.0`；version code：`11100`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
 
 ## 核心原则
 
@@ -152,6 +152,7 @@ VERSION                  version name 与递增 version code
 agents/openai.yaml       Skill UI 元数据
 adapters/                Seedance 2.0/2.5、Kling 与适配器契约
 references/              共享原则、完整输入 schema、演技提升、镜头导演、交互表演、情绪表演范式、表演词条库、表演内核、成片反馈、模式规则、证据与质量门禁
+templates/               已验证同族视频的母版模板（模板实例化优先于规则重组）
 tests/                   验收案例、回归样例与静态校验
 ```
 

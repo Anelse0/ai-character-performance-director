@@ -35,6 +35,7 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 
 | 任务 | 必读（按序） |
 |---|---|
+| **同族模板命中（最高优先）** | 命中 `templates/` 下某个母版触发条件时，**只读该母版并按其实例化规则改槽位，其余逐字保留**；不走规则重组，不读其他 reference。当前母版：`templates/sd25-30s-ots-emotion.md`（SD2.5·30s·越肩单主体关系情绪戏）。仅当用户明确要求偏离该族时回到下面的行 |
 | 角色生成 fast | `shared-principles` → `acting-craft`（§2–6，light 深度）→ 模式 ref（`actor-cut` 或 `narrative-performance`）→ 目标适配器 |
 | 角色生成 standard | `shared-principles` → `acting-craft`（跳过 §11 来源登记）→ `acting-core` → 模式 ref → `camera-direction`（跳过 §2 证据基础）→ 目标适配器 |
 | 角色生成 deep | standard 全部 ＋ `quality-gates` 全量逐项 |

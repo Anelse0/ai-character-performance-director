@@ -29,6 +29,7 @@ required_files=(
   "adapters/seedance-2.md"
   "adapters/seedance-2.5.md"
   "adapters/kling-3.md"
+  "templates/sd25-30s-ots-emotion.md"
   "tests/acceptance-cases.md"
   "tests/fixtures/seedance25-30s-farewell-monologue.verified.md"
   "tests/fixtures/seedance25-30s-argument-oscillating.verified.md"
@@ -45,9 +46,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.10\.3$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11003$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.10.3`；version code：`11003`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.11\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11100$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.11.0`；version code：`11100`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -564,5 +565,20 @@ grep -A2 '^### \[USER-STYLE-01\]' "${skill_root}/references/evidence-ledger.md" 
 grep -q '仅限不同族场景' "${skill_root}/references/performance-lexicon.md"
 grep -q '一致性就是产品需求' "${skill_root}/references/performance-lexicon.md"
 grep -q '解释性情绪注解是已验证样式' "${skill_root}/references/acting-core.md"
+
+# --- 1.11.0: master template + template-first routing ([USER-TEMPLATE-01]) ---
+tpl="${skill_root}/templates/sd25-30s-ots-emotion.md"
+grep -q '^## 0\. 触发条件' "${tpl}"
+grep -q '不可改(冻结)' "${tpl}"
+grep -q '一行一拍' "${tpl}"
+grep -q '【对白槽 A' "${tpl}"
+grep -q '【对白槽 E' "${tpl}"
+grep -q '想笑没笑成\|想露出一点笑' "${tpl}"
+grep -q '在情绪仍然悬而未决' "${tpl}"
+test "$(grep -c '台词：' "${tpl}")" -eq 0
+grep -q '同族模板命中（最高优先）' "${skill_root}/SKILL.md"
+grep -q 'templates/sd25-30s-ots-emotion.md' "${skill_root}/SKILL.md"
+grep -q '\[USER-TEMPLATE-01\]' "${skill_root}/references/evidence-ledger.md"
+grep -A2 '^### \[USER-TEMPLATE-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`'
 
 echo "Skill structure and required contracts are valid."
