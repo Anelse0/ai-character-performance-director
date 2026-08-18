@@ -124,7 +124,7 @@ L5 持续约束重述      把 L1/L2/L3 在结尾再声明一遍,作为贯穿全
 
 - **单一情绪递进**:`user_verified` `[USER-SD25-01]`(Seedance 2.5 / 30s / 图参考);逐字存档 `tests/fixtures/seedance25-30s-farewell-monologue.verified.md`。仅限该模型/时长/图参考/内容。
 - **受激分层递进**:`user_verified` `[USER-SD25-02]`(Seedance 2.5 / 30s / 图参考,争吵戏);逐字存档 `tests/fixtures/seedance25-30s-argument-oscillating.verified.md`。仅限该条件与题材;题材先验红利与 prompt 工艺贡献未隔离。
-- **双人情绪交流**:`experimental`(设计级),**无成片验证**;结构委托已验证的引擎(narrative-performance / dialogue-listening),但整体效果尚未实拍确认,产出后按证据门禁回填。
+- **双人情绪交流**:`experimental`,**无成片验证**,但已有**官方结构锚**(`templates/official-exemplars.md` E2 冬夜递书,`[S25-EXEMPLAR-01]`);生成走锚定转写双锚制,结构委托 narrative-performance / dialogue-listening 作仲裁。
 - **短时长情绪反转(不作为形态)**:10–15s 内反转不符合表演规律(见 §1.1 设计边界与 `[USER-SD20-01]`);受激分层递进不是它的回归,三前提缺一不可。
 - **域警示**:两条 `user_verified` 样本同属"夜内景/越肩/年轻女性/关系戏"窄域,跨域(男性/白天/非关系戏/非越肩)与跨模型结论一律 `experimental`。
 

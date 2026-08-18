@@ -21,6 +21,7 @@ required_files=(
   "adapters/seedance-2.5.md" "adapters/kling-3.md"
   "templates/sd25-30s-ots-emotion.md" "templates/sd25-30s-ots-argument.md"
   "templates/anchoring.md"
+  "templates/official-exemplars.md"
   "tests/acceptance-cases.md"
   "tests/fixtures/seedance25-30s-farewell-monologue.verified.md"
   "tests/fixtures/seedance25-30s-argument-oscillating.verified.md"
@@ -41,9 +42,9 @@ done < <(grep -oE '`(references|adapters|templates|tests)/[^`]+\.md`' "${skill_r
 
 # ---------- 2. 版本同步 ----------
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.13\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11300$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.13.0`；version code：`11300`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.14\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11400$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.14.0`；version code：`11400`' "${skill_root}/README.md"
 
 # ---------- 3. 入口同步(第一入口必须追踪下游状态) ----------
 sk="${skill_root}/SKILL.md"
@@ -54,6 +55,9 @@ grep -q '② 锚定转写' "${sk}"
 grep -q 'templates/sd25-30s-ots-emotion.md' "${sk}"
 grep -q 'templates/sd25-30s-ots-argument.md' "${sk}"
 grep -q 'templates/anchoring.md' "${sk}"
+grep -q 'templates/official-exemplars.md' "${sk}"
+grep -q '双锚制' "${sk}"
+grep -q '验收三问' "${sk}"
 grep -q '`evidence-ledger` 不进入生成路径' "${sk}"
 grep -q '质量门分档执行' "${sk}"
 grep -q '16–30 秒' "${sk}"
@@ -79,9 +83,18 @@ grep -q '只替换引号内的句子' "${etpl}"
 grep -q '对方回应槽 R1/R2' "${atpl}"
 grep -q '按实测原样逐字保留' "${atpl}"
 # 锚定规则完整
+grep -q '质感声纹清单' "${anch}"
+grep -q '结构锚' "${anch}"
 for step in 'Step 0 选锚' 'Step 1 内容推导' 'Step 2 语义对位替换' 'Step 3 官方合规校验' 'Step 4 输出前核对'; do
   grep -q "${step}" "${anch}"
 done
+
+# 官方范本库完整性
+ex="${skill_root}/templates/official-exemplars.md"
+for e in '熊猫幼崽' '冬夜递书' '火箭告别' '宿舍短剧' '悬崖对手戏' '灵鱼' '像素武侠'; do
+  grep -q "${e}" "${ex}" || { echo "Missing official exemplar: ${e}" >&2; exit 1; }
+done
+grep -q '不承载用户口味' "${ex}"
 
 # ---------- 5. 证据状态 ----------
 el="${skill_root}/references/evidence-ledger.md"
@@ -94,7 +107,7 @@ for id in USER-TEMPLATE-01 USER-STYLE-01 USER-FORMAT-01 USER-PROMPT-01 USER-POLI
   grep -A3 "^### \[${id}\]" "${el}" | grep -q '状态：`user_approved`' || {
     echo "Evidence ${id} missing or not user_approved" >&2; exit 1; }
 done
-for id in S25-CAP-01 S25-FORMULA-01 S20-FMT-01 K-I2V-01 K-MC-01 K-CAM-01 K-MS-02 S2-CAM-01; do
+for id in S25-CAP-01 S25-FORMULA-01 S20-FMT-01 S25-EXEMPLAR-01 K-I2V-01 K-MC-01 K-CAM-01 K-MS-02 S2-CAM-01; do
   grep -q "\[${id}\]" "${el}" || { echo "Missing official evidence: ${id}" >&2; exit 1; }
 done
 

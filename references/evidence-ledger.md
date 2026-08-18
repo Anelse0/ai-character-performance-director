@@ -276,6 +276,14 @@
 - 逐字存档:`tests/fixtures/seedance25-30s-argument-oscillating-zh.verified.md`;母版:`templates/sd25-30s-ots-argument.md`(正文与存档逐字同源,validate 比对)。
 - 禁止扩写:仅限该条件与题材;鲁棒性结论不外推为"尾块可随意乱写",仅支持降低一致性检查的严格度。
 
+### [S25-EXEMPLAR-01] / [S20-EXEMPLAR-01] 官方完整示例 prompt(跨域结构锚)
+
+- 状态：`official`
+- 来源：火山方舟《Doubao Seedance 2.5 提示词指南》《Doubao Seedance 2.0 系列提示词指南》官方 PDF,2026-08-18 逐字提取。
+- 内容:7 个官方完整示例 prompt,收录于 `templates/official-exemplars.md`——熊猫幼崽(写实自然)、冬夜递书(双人情绪文戏)、火箭告别(30s 9 镜动画叙事)、宿舍短剧(多人对话)、悬崖对手戏(动作武戏)、灵鱼(关键帧奇幻)、像素武侠(motion design);另 Kling 8s 域锚为用户级 fixture。
+- 允许结论:作为跨域锚定的**结构锚**(镜数组织/素材绑定/分镜语法在该域可行);双人情绪文戏形态因 E2 从"无锚"升为"有官方结构锚"。
+- 禁止扩写:官方范本不承载用户口味,不构成成片质量保证;基于它的产出保持 `experimental` 直至用户验收。
+
 ### [USER-POLICY-01] Skill 证据门禁
 
 - 状态：`user_approved`

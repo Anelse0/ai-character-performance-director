@@ -38,8 +38,8 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 | 任务 | 必读（按序） |
 |---|---|
 | **① 母版实例化（最高优先）** | 命中 `templates/` 下某个母版触发条件时，**只读该母版并按其实例化规则改槽位，其余逐字保留**。当前母版：`templates/sd25-30s-ots-emotion.md`（告别/单向递进族）、`templates/sd25-30s-ots-argument.md`（争吵/受激分层族）。仅当用户明确要求偏离该族时降级 |
-| **② 锚定转写** | 关系情绪戏（单主体/越肩/SD2.5 类）但不精确命中母版（重逢/告白/嫉妒等新场景）：读最近母版全文 ＋ `templates/anchoring.md`，按其 Step 0–4 转写；深层 reference 只在偏离锚机制时作仲裁。产物标 experimental，待成片验证 |
-| ③ 角色生成 fast | `shared-principles` → `acting-craft`（§2–6，light 深度）→ 模式 ref（`actor-cut` 或 `narrative-performance`）→ 目标适配器 |
+| **② 锚定转写** | 不精确命中母版的生成请求：**同域**（关系情绪戏新场景）→ 最近用户母版为锚；**跨域**（动物/双人/多人/动作/动画/风格化等）→ **双锚制**（结构锚=`templates/official-exemplars.md` 域匹配官方范本，质感锚=最近用户母版）。读锚全文 ＋ `templates/anchoring.md` 按 Step 0–4 转写；深层 reference 只作仲裁。产物标 experimental，附验收三问 |
+| ③ 角色生成 fast（无锚可用的真空域才走 ③ 各行）| `shared-principles` → `acting-craft`（§2–6，light 深度）→ 模式 ref（`actor-cut` 或 `narrative-performance`）→ 目标适配器 |
 | 角色生成 standard | `shared-principles` → `acting-craft`（跳过 §11 来源登记）→ `acting-core` → 模式 ref → `camera-direction`（跳过 §2 证据基础）→ 目标适配器 |
 | 角色生成 deep | standard 全部 ＋ `quality-gates` 全量逐项 |
 | 环境生成 | `shared-principles` → `camera-direction`（跳过 §2）→ 目标适配器；deep 加 `quality-gates` 全量 |
@@ -274,6 +274,7 @@ existing expectation / baseline
 6. `Kling 3.0 配置` 与 `Kling 3.0 Prompt`：仅在需要 Kling 时输出；多镜逐镜列出。Motion Control 还要输出动作来源、Facial Element 参考计划和不与动作参考冲突的补充 Prompt；素材不足时同时给出缺口与可运行的 Standard 降级方案。
 7. `成功标准`：三条可从成片直接观察的标准。角色模式分别覆盖核心行动/ending、Camera Unit 的执行或落幅、主体—镜头协调；环境模式覆盖镜头意图、路径/落幅和空间几何；交互任务优先覆盖实体许可、动作可读性及结束状态/镜头协调。不要让新增镜头验收挤掉用户的核心表演或交互要求。
 8. `不确定性 / 调试`：只写最主要的一条，不承诺硬控制。
+9. `验收三问`：仅 experimental 产出（路径②/③）附带——≤3 条各 10 秒内可回答的成片观察点（如“转折是否可读”“构图是否保持越肩”“终句是否最轻”），用于用户以最低成本完成 pass/fail 验收；通过即回填证据并可固化为新母版。
 
 若交互任务触发 `source_preflight: block` 或 `render_mode: incompatible`，不要输出不可运行 Prompt；改为输出冲突、最低改动的素材/动作方案及继续生成所需条件。
 
