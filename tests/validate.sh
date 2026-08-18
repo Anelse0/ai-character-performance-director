@@ -30,9 +30,11 @@ required_files=(
   "adapters/seedance-2.5.md"
   "adapters/kling-3.md"
   "templates/sd25-30s-ots-emotion.md"
+  "templates/sd25-30s-ots-argument.md"
   "tests/acceptance-cases.md"
   "tests/fixtures/seedance25-30s-farewell-monologue.verified.md"
   "tests/fixtures/seedance25-30s-argument-oscillating.verified.md"
+  "tests/fixtures/seedance25-30s-argument-oscillating-zh.verified.md"
   "tests/fixtures/acting-craft-forward-tests-v1.1.0.md"
   "tests/fixtures/interaction-performance-forward-tests-v1.2.0.md"
   "tests/fixtures/camera-direction-forward-tests-v1.3.0.md"
@@ -46,9 +48,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.11\.1$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11101$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.11.1`；version code：`11101`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.12\.0$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11200$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.12.0`；version code：`11200`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -583,5 +585,18 @@ grep -q '同族模板命中（最高优先）' "${skill_root}/SKILL.md"
 grep -q 'templates/sd25-30s-ots-emotion.md' "${skill_root}/SKILL.md"
 grep -q '\[USER-TEMPLATE-01\]' "${skill_root}/references/evidence-ledger.md"
 grep -A2 '^### \[USER-TEMPLATE-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`'
+
+# --- 1.12.0: argument master template ([USER-SD25-03]), body must byte-match fixture ---
+atpl="${skill_root}/templates/sd25-30s-ots-argument.md"
+afix="${skill_root}/tests/fixtures/seedance25-30s-argument-oscillating-zh.verified.md"
+grep -q '\[USER-SD25-03\]' "${skill_root}/references/evidence-ledger.md"
+grep -A2 '^### \[USER-SD25-03\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_verified`'
+grep -q '对方回应槽 R1/R2' "${atpl}"
+grep -q '按实测原样逐字保留' "${atpl}"
+diff <(awk '/^```text$/,/^```$/' "${atpl}") <(awk '/^```text$/,/^```$/' "${afix}") >/dev/null || {
+  echo "Argument master body drifted from verified fixture" >&2
+  exit 1
+}
+grep -q 'templates/sd25-30s-ots-argument.md' "${skill_root}/SKILL.md"
 
 echo "Skill structure and required contracts are valid."
