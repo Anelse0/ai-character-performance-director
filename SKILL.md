@@ -23,50 +23,39 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 
 用户明确写“演员 Cut / Actor Cut / 剧情表演 / 空镜 / 航拍 / 建立镜头”时服从指定；否则自动判断。模式判断不确定且结果会实质不同时，只问一个简短问题。
 
-## 读取规则
+## 路由表（唯一路由）
 
-所有生成与评价任务都先内化 `references/shared-principles.md`（跨文件权威规则与设计立场）。其余参考按下方“复杂度分档”和场景决定；快车道请求只读该档所列文件，不为“更完整”加载无关参考。
+先判定：**任务**（生成/评价）×**模式**（角色/环境）×**档位**（fast/standard/deep）。档位标准：
 
-设计角色表演、生成角色 Prompt 或根据反馈输出角色修正版 Prompt 时读取：
+- **快车道 fast**：单人单镜、≤8 秒、`actor_cut` 或单一空镜；无交互、无对白、无复杂/接触动作、无实体硬排除。
+- **标准 standard**：7–30 秒（16–30 秒仅限 Seedance 2.5 直出）、有可定位反馈或一次策略调整、单一交互或短对白。
+- **复杂 deep**：多人冲突、高潮阈值、物体交换/持续接触、实体硬排除、Motion Control、多镜序列。
 
-1. `references/acting-craft.md`
-2. `references/acting-core.md`
-3. 与模式对应的 `references/actor-cut.md` 或 `references/narrative-performance.md`
-4. `references/camera-direction.md`
-5. `references/quality-gates.md`
-6. `references/evidence-ledger.md`
+不确定取低一档；结果会实质不同时只问一个简短问题。按下表**逐行按序读取**（括号内为跳过的小节；来源登记/证据基础类小节只在审计时读）：
 
-设计环境空镜、航拍、建立镜头或对应修正版 Prompt 时读取：
+| 任务 | 必读（按序） |
+|---|---|
+| 角色生成 fast | `shared-principles` → `acting-craft`（§2–6，light 深度）→ 模式 ref（`actor-cut` 或 `narrative-performance`）→ 目标适配器 |
+| 角色生成 standard | `shared-principles` → `acting-craft`（跳过 §11 来源登记）→ `acting-core` → 模式 ref → `camera-direction`（跳过 §2 证据基础）→ 目标适配器 |
+| 角色生成 deep | standard 全部 ＋ `quality-gates` 全量逐项 |
+| 环境生成 | `shared-principles` → `camera-direction`（跳过 §2）→ 目标适配器；deep 加 `quality-gates` 全量 |
+| 成片评价 / 定向修正 | `performance-review` → 模式 ref → `camera-direction` → `quality-gates`（§G＋涉事小节）→ `evidence-ledger`；需要修正版 Prompt 时诊断后回到对应生成行 |
+| 证据登记 / 审计 | `evidence-ledger`（含各文件的来源登记小节） |
 
-1. `references/camera-direction.md`
-2. `references/quality-gates.md`
-3. `references/evidence-ledger.md`
+**按需叠加**（任何档位，命中即读）：
 
-只评价成片或比较 Take、不生成修正版 Prompt 时读取：
+- 情绪表演（≥15s 或涉及形态选择）：`references/longform-performance-pattern.md`（形态选择器：单一情绪递进/受激分层递进已验证，双人为设计级；短时长情绪反转不作为形态）；写 L4 外化措辞时查 `references/performance-lexicon.md`（词条不回答“演什么”，只回答“怎么写准”）
+- 交互/接触/物体交换/镜头表面动作/实体硬排除，或成片出现实体增生与动作误读：`references/interaction-performance.md`
+- 对白、画外音、听戏或多人话轮：`references/dialogue-listening.md`
+- 崩溃、强忍泪、压抑愤怒、表白、分手等阈值场面：`references/climax-failures.md`
+- Kling 复杂动作、转头情绪、精确复现或 Motion Control：`references/kling-motion-control.md`
+- 适配器：Seedance 2.5 → `adapters/seedance-2.5.md`；Seedance 2.0 → `adapters/seedance-2.md`；Kling → `adapters/kling-3.md`；扩展新模型 → `adapters/adapter-contract.md`
 
-1. `references/performance-review.md`
-2. 与模式对应的 `references/actor-cut.md` 或 `references/narrative-performance.md`
-3. `references/camera-direction.md`
-4. `references/quality-gates.md`
-5. `references/evidence-ledger.md`
+**质量门分档执行**：所有档位常驻执行**核心程序**——需求逐项核对、Prompt 自足性与必写项、默认输出契约（三者已内嵌于本文件“默认输出”节，无需加载 `quality-gates.md`）；`quality-gates.md` 的 A–H 细则清单仅在 **deep 档与成片评价**时逐项过。
 
-只评价环境镜头时读取 `references/performance-review.md`、`references/camera-direction.md`、`references/quality-gates.md` 与 `references/evidence-ledger.md`。
+**`evidence-ledger` 不进入生成路径**：生成所需的模型结论已写入各适配器与 reference；账本仅在成片评价、证据登记与审计时读取。
 
-按需再读取：
-
-- 有对镜/画外交互、身体接触、物体交换、镜头表面动作、禁止出现对方/额外身体局部/无关物体，或成片出现交互对象增生与动作误读：`references/interaction-performance.md`
-- 有对白、画外音、听戏或多人话轮：`references/dialogue-listening.md`
-- 有崩溃、强忍泪、惊恐、压抑愤怒、表白、分手、背叛等阈值场面：`references/climax-failures.md`
-- 输出 Kling 且包含复杂动作、转头中的情绪变化、精确动作复现或 Motion Control：`references/kling-motion-control.md`
-- 输出 Seedance 2.0：`adapters/seedance-2.md`
-- 输出 Seedance 2.5（30s one-take）：`adapters/seedance-2.5.md`
-- 输出 Kling：`adapters/kling-3.md`
-- 以情绪表演为内容的角色视频（单一情绪递进 / 受激分层递进 / 双人情绪交流）：`references/longform-performance-pattern.md`（含形态选择器与 Seedance 2.5/2.0、Kling 3.0 分模型渲染；前两形态已验证，双人为设计级。短时长情绪反转不作为形态）
-- 写 L4 外化措辞时按需取用：`references/performance-lexicon.md`（通道组织的表演词条库,含反同质化规则；词条不回答"演什么",只回答"怎么写准"）
-- 扩展新模型适配器：`adapters/adapter-contract.md`
-- 根据成片或多个 Take 输出修正版 Prompt：先读取 `references/performance-review.md` 完成诊断，再进入完整表演设计流程。
-
-不要为了“更完整”加载与当前请求无关的参考。
+不要为了“更完整”加载与当前行无关的参考。
 
 ## 输入策略
 
@@ -110,13 +99,7 @@ ending:
 
 ### 0. 复杂度分档（先做）
 
-先判断请求属于哪一档，避免对简单请求启动全套机器。分档只改流程负荷，**不改证据门禁与默认输出契约**。
-
-- **快车道 fast**：单人单镜、≤8 秒、`actor_cut` 或单一空镜；无交互对象、无对白、无复杂/接触动作、无实体硬排除。只读 `shared-principles`、`acting-craft`（取 `light` 深度）、对应模式 ref、目标适配器、`quality-gates` 相关子节；跳过 interaction / dialogue / climax / motion-control。直接走 `target → WANT → tactic → 一次可见变化 → ending` ＋ 一个 Camera Unit。
-- **标准 standard**：7–30 秒（16–30 秒仅限 Seedance 2.5 直出，走 `longform` 情绪表演范式）、有可定位反馈或一次策略调整、单一交互或短对白。按完整读取规则，用 `analysis_depth` 控制深度。
-- **复杂 deep**：多人冲突、高潮阈值、物体交换或持续接触、实体硬排除、Motion Control、多镜序列。加载全部相关 reference，逐项过质量门。
-
-判断不确定且结果会实质不同时，按低一档处理，必要时只问一个简短问题。
+按「路由表（唯一路由）」判定档位并完成读取；分档只改流程负荷，**不改证据门禁与默认输出契约**。fast 档直接走 `target → WANT → tactic → 一次可见变化 → ending` ＋ 一个 Camera Unit；standard 档用 `analysis_depth` 控制分析深度；deep 档逐项过质量门。
 
 ### 1. 判断模式
 
@@ -259,7 +242,7 @@ existing expectation / baseline
 
 ### 10. 质量检查与定向护栏
 
-按 `references/quality-gates.md` 检查。护栏只针对当前已知或高概率失败，首轮保持少量、不冲突，并优先给正向替代：
+按路由表的分档执行质量检查：所有档位执行核心程序（需求逐项核对、自足性与必写项、默认输出契约，见“默认输出”节）；deep 档与成片评价另按 `references/quality-gates.md` 逐项过 A–H 细则。护栏只针对当前已知或高概率失败，首轮保持少量、不冲突，并优先给正向替代：
 
 ```text
 差：no random gestures
