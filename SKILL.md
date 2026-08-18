@@ -33,10 +33,13 @@ description: 把角色意图、关系、刺激、情绪、对白、环境与镜�
 
 不确定取低一档；结果会实质不同时只问一个简短问题。按下表**逐行按序读取**（括号内为跳过的小节；来源登记/证据基础类小节只在审计时读）：
 
+**生成分三条路径，按优先级判定**：①**母版实例化**（精确命中已验证族）→ ②**锚定转写**（同域但不精确命中）→ ③**规则重组**（其余场景，按档位行）。质量确定性从 ① 到 ③ 递减；能走前一条就不走后一条。
+
 | 任务 | 必读（按序） |
 |---|---|
-| **同族模板命中（最高优先）** | 命中 `templates/` 下某个母版触发条件时，**只读该母版并按其实例化规则改槽位，其余逐字保留**；不走规则重组，不读其他 reference。当前母版：`templates/sd25-30s-ots-emotion.md`（告别/单向递进族）、`templates/sd25-30s-ots-argument.md`（争吵/受激分层族）。仅当用户明确要求偏离该族时回到下面的行 |
-| 角色生成 fast | `shared-principles` → `acting-craft`（§2–6，light 深度）→ 模式 ref（`actor-cut` 或 `narrative-performance`）→ 目标适配器 |
+| **① 母版实例化（最高优先）** | 命中 `templates/` 下某个母版触发条件时，**只读该母版并按其实例化规则改槽位，其余逐字保留**。当前母版：`templates/sd25-30s-ots-emotion.md`（告别/单向递进族）、`templates/sd25-30s-ots-argument.md`（争吵/受激分层族）。仅当用户明确要求偏离该族时降级 |
+| **② 锚定转写** | 关系情绪戏（单主体/越肩/SD2.5 类）但不精确命中母版（重逢/告白/嫉妒等新场景）：读最近母版全文 ＋ `templates/anchoring.md`，按其 Step 0–4 转写；深层 reference 只在偏离锚机制时作仲裁。产物标 experimental，待成片验证 |
+| ③ 角色生成 fast | `shared-principles` → `acting-craft`（§2–6，light 深度）→ 模式 ref（`actor-cut` 或 `narrative-performance`）→ 目标适配器 |
 | 角色生成 standard | `shared-principles` → `acting-craft`（跳过 §11 来源登记）→ `acting-core` → 模式 ref → `camera-direction`（跳过 §2 证据基础）→ 目标适配器 |
 | 角色生成 deep | standard 全部 ＋ `quality-gates` 全量逐项 |
 | 环境生成 | `shared-principles` → `camera-direction`（跳过 §2）→ 目标适配器；deep 加 `quality-gates` 全量 |
@@ -278,7 +281,7 @@ Prompt 本体应可直接复制；镜头设计必须已经写入正文，不要�
 
 内容超出目标模型单次生成上限时，逐条输出 `video1 / video2 …` 的可运行 Prompt 及各自时长，每条重复身份契约、声明与上一条结束状态的承接；默认不删内容，只有用户明确要单条成片时才压缩。
 
-**所有 Prompt 一律用结构化分镜格式，不限类型**（情绪表演、剧情、空镜/环境等都适用）：身份/主体契约 → 场景/总纲 → `Shot 01–N` 分段 → Performance Direction/持续约束 重述（即 `references/longform-performance-pattern.md` §6 的验证格式）。**不用连续 prose 段落**；单一不可切分的动作写成单个 `Shot`（N=1），而非回退 prose。Seedance 顶部先声明镜数/时长/画幅（官方 `[S20-FMT-01]`），Kling 演员 Cut 情绪用 `【0–t｜状态】` 时间分段。相对时序词（when / after a beat / only then）只在**单个 Shot 内部**描述 beat 时使用。
+**所有 Prompt 一律用结构化分镜格式，不限类型**（情绪表演、剧情、空镜/环境等都适用）：身份/主体契约 → 场景/总纲 → `Shot 01–N` 分段 → Performance Direction/持续约束 重述（验证格式的权威样本见 `templates/` 母版）。**不用连续 prose 段落**；单一不可切分的动作写成单个 `Shot`（N=1），而非回退 prose。Seedance 顶部先声明镜数/时长/画幅（官方 `[S20-FMT-01]`），Kling 演员 Cut 情绪用 `【0–t｜状态】` 时间分段。相对时序词（when / after a beat / only then）只在**单个 Shot 内部**描述 beat 时使用。
 
 **输出格式规范**（`[USER-FORMAT-01]`，以已验证 fixture 的微格式为渲染基准）：
 
