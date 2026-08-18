@@ -6,21 +6,20 @@
 
 ## 渲染原则
 
-把语义对象写成一段连续因果 prose：
+顶层容器永远是结构化分镜块(见下文「结构化分镜」);**因果时序链只在单个 Shot 块内部**组织 beat:
 
 ```text
-shot and identity/reference responsibility
-→ baseline and current goal
+[Shot 块内部]
+baseline and current goal
 → when trigger happens...
 → at first / after a beat / only then...
 → primary visible change + optional readable support
 → action/control/choice
 → dialogue after action, if any
 → end with explicit residue
-→ short targeted guardrails
 ```
 
-标签只是这里的规划顺序，最终正文不用显示 `TRIGGER:`、`END STATE:` 等作者字段。
+标签只是这里的规划顺序，最终正文不用显示 `TRIGGER:`、`END STATE:` 等作者字段;身份/参考职责与护栏分别放在头部契约与结尾 Performance Direction,不塞进 Shot 块。
 
 ## 镜头设计与参考职责
 

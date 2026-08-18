@@ -250,7 +250,7 @@ existing expectation / baseline
 
 ### 9. 渲染模型版本
 
-- Seedance：连续因果 prose，使用相对时序，保留 Camera Unit 的起幅、主运动和落幅；复杂路径优先使用视频参考。
+- Seedance：结构化分镜（`镜头 N`；2.0 不写时间标注、2.5 可用整数秒时间段），因果相对时序只在 Shot 块内部；保留 Camera Unit 的起幅、主运动和落幅；复杂路径优先使用视频参考。
 - Kling：把 UI/API 配置与正文分开；Prompt 与独立 Camera Movement 控件不得冲突；Custom Multi-Shot 每镜一个戏剧和视觉任务并给逐镜时长。
 - Kling Standard/Omni 的演员 Cut 情绪输出：正文使用带时间范围的分段框架。分段数量、边界与状态标题按本次表演动态生成；标题直接写 `【0–1.4s｜状态】`，不得在时间前添加“约”。正文同时声明时间范围仅作节奏参考，跨段动作必须连续，不得在边界停顿、重置或重新起势。Motion Control 不使用该框架驱动动作。
 

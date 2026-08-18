@@ -45,9 +45,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.9\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=10900$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.9.0`；version code：`10900`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.9\.1$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=10901$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.9.1`；version code：`10901`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -138,7 +138,7 @@ grep -q '\[USER-K3-02\]' "${skill_root}/references/evidence-ledger.md"
 grep -q '\[USER-CRAFT-01\]' "${skill_root}/references/evidence-ledger.md"
 grep -q '\[USER-CRAFT-02\]' "${skill_root}/references/evidence-ledger.md"
 grep -q '\[K-I2V-01\]' "${skill_root}/references/evidence-ledger.md"
-grep -q '连续因果 prose' "${skill_root}/adapters/seedance-2.md"
+grep -q '因果时序链只在单个 Shot 块内部' "${skill_root}/adapters/seedance-2.md"
 grep -q '^## G\. 演技提升引擎$' "${skill_root}/tests/acceptance-cases.md"
 grep -q '不能宣称实际成片演技成立' "${skill_root}/tests/acceptance-cases.md"
 grep -q '不使用综合演技总分' "${skill_root}/tests/acceptance-cases.md"
@@ -505,5 +505,12 @@ grep -q '合法设计' "${skill_root}/SKILL.md"
 argfix="${skill_root}/tests/fixtures/seedance25-30s-argument-oscillating.verified.md"
 grep -q '状态：`user_verified`' "${argfix}"
 grep -q 'The Heaviest Line' "${argfix}"
+
+# --- 1.9.1: stale "continuous causal prose as top-level format" must not regress ---
+test "$(grep -c '写成一段连续因果 prose' "${skill_root}/adapters/seedance-2.md")" -eq 0
+test "$(grep -c 'Seedance 使用连续因果 prose 和相对时序' "${skill_root}/references/quality-gates.md")" -eq 0
+test "$(grep -c '^- Seedance：连续因果 prose' "${skill_root}/SKILL.md")" -eq 0
+grep -q '因果相对时序只在 Shot 块内部' "${skill_root}/SKILL.md"
+grep -q '因果相对时序只在单个 Shot 块内部使用' "${skill_root}/references/quality-gates.md"
 
 echo "Skill structure and required contracts are valid."

@@ -105,7 +105,7 @@
 
 ## E. 模型适配
 
-- [ ] Seedance 使用连续因果 prose 和相对时序，没有伪造精确镜内时间控制。
+- [ ] Seedance 使用结构化分镜（`镜头 N`）作为顶层容器，因果相对时序只在单个 Shot 块内部使用；2.0 的 Shot 标题没有时间标注（2.0 不响应时间戳），2.5 才可用整数秒时间段；没有伪造精确镜内时间控制。
 - [ ] Seedance 的简单 Camera Unit 使用文本；复杂路径优先绑定视频参考或标为实验，正文没有与参考竞争。
 - [ ] Kling 将配置和 Prompt 正文分离，规划标签没有冒充官方字段。
 - [ ] Kling 单镜优先一个主运镜；UI 控件、Start/End Frames、Custom Multi-Shot 与 Prompt 的职责已分离。
