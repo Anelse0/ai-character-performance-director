@@ -4,7 +4,7 @@
 
 支持 Seedance 2.0、Seedance 2.5（30s one-take）与 Kling 3.0，覆盖演员 Cut、剧情表演、环境空镜、航拍、建立镜头、对白听戏、角色交互、复杂动作、情绪表演范式（单一情绪递进 / 受激分层递进 / 双人交流）、表演词条库及失败修复。
 
-当前版本：`1.14.0`；version code：`11400`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
+当前版本：`1.14.1`；version code：`11401`。版本号采用 SemVer，version code 按 `major × 10000 + minor × 100 + patch` 计算，机器可读值见 [`VERSION`](VERSION)。
 
 ## 核心原则
 
@@ -149,11 +149,10 @@ Kling 3.0 Standard，8 秒，演员 Cut，单人面对镜头，无台词。
 ```text
 SKILL.md                 路由表（任务×档位）、输入输出契约、工作流与黄金样例
 VERSION                  version name 与递增 version code
-agents/openai.yaml       Skill UI 元数据
 adapters/                Seedance 2.0/2.5、Kling 与适配器契约
 references/              共享原则、完整输入 schema、演技提升、镜头导演、交互表演、情绪表演范式、表演词条库、表演内核、成片反馈、模式规则、证据与质量门禁
 templates/               母版模板与锚定转写规则（生成三路径：实例化→锚定转写→规则重组）
-tests/                   验收案例、回归样例与静态校验
+tests/                   已验证 prompt 逐字存档(fixtures)与静态校验
 ```
 
 ## 验证
@@ -162,4 +161,4 @@ tests/                   验收案例、回归样例与静态校验
 ./tests/validate.sh
 ```
 
-验证覆盖版本元数据、三种模式、Camera Unit、环境/航拍、静止判断、演员—镜头预算、模型运镜来源、演技与交互路由、实体门禁、适配器继承、成片反馈、时长契约、Kling 动态分段、复杂动作、证据登记及历史回归。行为回归用于验证 Skill 决策，不等同于 Kling 或 Seedance 成片验证。
+校验六类断言：文件存在与断链、版本同步、入口同步、母版完整性（含母版正文与验证存档逐字比对）、证据状态、核心内容不变量。静态校验用于验证 Skill 结构一致性，不等同于成片验证。

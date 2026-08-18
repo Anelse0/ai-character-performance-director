@@ -6,7 +6,7 @@
 
 - **official 能力最后核实：2026-08-18(Seedance 2.0/2.5 已按用户提供的火山方舟官方 PDF 指南一手全文核实;Kling 仍为 2026-08-13 网页核实)。** 官方入口、字段与能力可能更新;输出前以当前官方资料为准,发现变化时按下方晋升规则重新登记。
 - **真实成片验证覆盖。** 目前 `user_verified` 成片证据:Kling 3.0 Standard 单人 `actor_cut`(`[USER-K3-01]`~`[USER-K3-04]`)、Seedance 2.5 30s 告别独白(`[USER-SD25-01]`,单一情绪递进)、Seedance 2.5 30s 争吵戏中英两版(`[USER-SD25-02]`/`[USER-SD25-03]`,受激分层递进),以及一条 Seedance 2.0 失败教训(`[USER-SD20-01]`)。注意:两条 2.5 成功样本同属"夜内景/越肩/年轻女性/关系戏"窄域,跨域结论保持 experimental。
-- **`environment`(空镜/航拍)与 `narrative` 多镜多人**目前只有自测 forward-test,**无真实生成验证**,应按设计级(`experimental`)置信度对待,不宣称成片质量已验证。跨文件设计立场见 `references/shared-principles.md`。
+- **`environment`(空镜/航拍)与 `narrative` 多镜多人**无真实生成验证,按设计级(`experimental`)置信度对待(早期自测 forward-test 产物因含过时格式已于 v1.14.1 清理,git 历史可查)。跨域生成走官方范本锚定(`[S25-EXEMPLAR-01]`)。跨文件设计立场见 `references/shared-principles.md`。
 
 ## 晋升规则
 

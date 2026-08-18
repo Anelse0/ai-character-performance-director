@@ -8,7 +8,7 @@ skill_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # ---------- 1. 文件存在 ----------
 required_files=(
-  "README.md" "SKILL.md" "VERSION" "agents/openai.yaml"
+  "README.md" "SKILL.md" "VERSION"
   "references/shared-principles.md" "references/input-schema.md"
   "references/longform-performance-pattern.md" "references/performance-lexicon.md"
   "references/acting-craft.md" "references/acting-core.md"
@@ -22,14 +22,10 @@ required_files=(
   "templates/sd25-30s-ots-emotion.md" "templates/sd25-30s-ots-argument.md"
   "templates/anchoring.md"
   "templates/official-exemplars.md"
-  "tests/acceptance-cases.md"
   "tests/fixtures/seedance25-30s-farewell-monologue.verified.md"
   "tests/fixtures/seedance25-30s-argument-oscillating.verified.md"
   "tests/fixtures/seedance25-30s-argument-oscillating-zh.verified.md"
   "tests/fixtures/kling3-standard-stationary-reunion.verified.md"
-  "tests/fixtures/acting-craft-forward-tests-v1.1.0.md"
-  "tests/fixtures/interaction-performance-forward-tests-v1.2.0.md"
-  "tests/fixtures/camera-direction-forward-tests-v1.3.0.md"
 )
 for path in "${required_files[@]}"; do
   test -s "${skill_root}/${path}" || { echo "Missing or empty: ${path}" >&2; exit 1; }
@@ -42,9 +38,9 @@ done < <(grep -oE '`(references|adapters|templates|tests)/[^`]+\.md`' "${skill_r
 
 # ---------- 2. 版本同步 ----------
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.14\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11400$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.14.0`；version code：`11400`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.14\.1$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11401$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.14.1`；version code：`11401`' "${skill_root}/README.md"
 
 # ---------- 3. 入口同步(第一入口必须追踪下游状态) ----------
 sk="${skill_root}/SKILL.md"
