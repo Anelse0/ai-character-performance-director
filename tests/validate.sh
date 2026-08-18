@@ -46,9 +46,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.11\.0$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11100$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.11.0`；version code：`11100`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.11\.1$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11101$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.11.1`；version code：`11101`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -571,8 +571,11 @@ tpl="${skill_root}/templates/sd25-30s-ots-emotion.md"
 grep -q '^## 0\. 触发条件' "${tpl}"
 grep -q '不可改(冻结)' "${tpl}"
 grep -q '一行一拍' "${tpl}"
-grep -q '【对白槽 A' "${tpl}"
-grep -q '【对白槽 E' "${tpl}"
+grep -q '我觉得……我真的没办法再继续下去了' "${tpl}"
+grep -q '我们该放彼此走了' "${tpl}"
+grep -q '只替换引号内的句子' "${tpl}"
+grep -q '5 个位置槽' "${tpl}"
+test "$(grep -c '【对白槽' "${tpl}")" -eq 0
 grep -q '想笑没笑成\|想露出一点笑' "${tpl}"
 grep -q '在情绪仍然悬而未决' "${tpl}"
 test "$(grep -c '台词：' "${tpl}")" -eq 0
