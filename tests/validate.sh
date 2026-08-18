@@ -45,9 +45,9 @@ for path in "${required_files[@]}"; do
 done
 
 grep -q '^name: ai-character-performance-director$' "${skill_root}/SKILL.md"
-grep -q '^VERSION_NAME=1\.10\.1$' "${skill_root}/VERSION"
-grep -q '^VERSION_CODE=11001$' "${skill_root}/VERSION"
-grep -q '当前版本：`1.10.1`；version code：`11001`' "${skill_root}/README.md"
+grep -q '^VERSION_NAME=1\.10\.2$' "${skill_root}/VERSION"
+grep -q '^VERSION_CODE=11002$' "${skill_root}/VERSION"
+grep -q '当前版本：`1.10.2`；version code：`11002`' "${skill_root}/README.md"
 grep -q '^# AI Character Performance Director$' "${skill_root}/README.md"
 grep -q '^## 证据门禁$' "${skill_root}/README.md"
 grep -q '`user_approved`：用户明确批准的 Skill 工作流' "${skill_root}/README.md"
@@ -552,5 +552,10 @@ grep -q '对白：' "${skill_root}/SKILL.md"
 grep -A2 '^### \[USER-FORMAT-01\]' "${skill_root}/references/evidence-ledger.md" | grep -q '状态：`user_approved`'
 test "$(grep -c '## 镜头 1 — \[状态名\]' "${skill_root}/adapters/seedance-2.md")" -eq 0
 grep -q '标题保持裸标题' "${skill_root}/references/longform-performance-pattern.md"
+
+# --- 1.10.2: micro-format spec (one sentence per line, dialogue block layout, verbatim L5) ---
+grep -q '每句一行' "${skill_root}/SKILL.md"
+grep -q '标签独占一行' "${skill_root}/SKILL.md"
+grep -q '微格式' "${skill_root}/references/evidence-ledger.md"
 
 echo "Skill structure and required contracts are valid."
